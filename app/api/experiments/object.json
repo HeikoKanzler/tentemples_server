@@ -1,0 +1,152 @@
+[
+  {
+    "name": "post_data",
+    "module": "core",
+    "action": "setvalue",
+    "options": {
+      "value": "{{$_POST}}",
+      "schema": [
+        {
+          "type": "text",
+          "name": "data1"
+        },
+        {
+          "type": "text",
+          "name": "data2"
+        }
+      ]
+    },
+    "meta": [
+      {
+        "type": "text",
+        "name": "data1"
+      },
+      {
+        "type": "text",
+        "name": "data2"
+      }
+    ],
+    "outputType": "text",
+    "output": false
+  },
+  {
+    "name": "group_data",
+    "module": "core",
+    "action": "group",
+    "options": {
+      "exec": {
+        "steps": [
+          {
+            "name": "calc_result",
+            "module": "core",
+            "action": "setvalue",
+            "options": {
+              "value": 0
+            },
+            "meta": [],
+            "outputType": "text",
+            "output": false
+          },
+          {
+            "name": "calculate",
+            "module": "runjs",
+            "action": "run",
+            "options": {
+              "data": {
+                "var1": "{{post_data.data1}}",
+                "var2": "{{post_data.data2}}"
+              },
+              "code": "return var1 * var2;"
+            }
+          },
+          {
+            "name": "data_1",
+            "module": "core",
+            "action": "setvalue",
+            "options": {
+              "value": "{{post_data.data1}}"
+            },
+            "meta": [],
+            "outputType": "text",
+            "output": false
+          },
+          {
+            "name": "data_2",
+            "module": "core",
+            "action": "setvalue",
+            "options": {
+              "value": "{{post_data.data2}}"
+            },
+            "meta": [],
+            "outputType": "text",
+            "output": false
+          },
+          {
+            "name": "data_3",
+            "module": "core",
+            "action": "setvalue",
+            "options": {
+              "value": "{{post_data.data3}}"
+            },
+            "meta": [
+              {
+                "name": "data1",
+                "type": "text"
+              },
+              {
+                "name": "data2",
+                "type": "text"
+              }
+            ],
+            "output": false,
+            "outputType": "text"
+          },
+          {
+            "name": "result",
+            "module": "core",
+            "action": "group",
+            "options": {
+              "exec": {
+                "steps": [
+                  {
+                    "name": "calc_result",
+                    "module": "core",
+                    "action": "setvalue",
+                    "options": {
+                      "value": "{{calculate}}"
+                    },
+                    "meta": [],
+                    "outputType": "text",
+                    "output": true
+                  },
+                  {
+                    "name": "nested",
+                    "module": "core",
+                    "action": "setvalue",
+                    "options": {
+                      "value": "{{post_data.nested.node}}"
+                    },
+                    "meta": [
+                      {
+                        "name": "data1",
+                        "type": "text"
+                      },
+                      {
+                        "name": "data2",
+                        "type": "text"
+                      }
+                    ],
+                    "outputType": "text",
+                    "output": true
+                  }
+                ]
+              }
+            },
+            "output": true
+          }
+        ]
+      }
+    },
+    "output": true
+  }
+]

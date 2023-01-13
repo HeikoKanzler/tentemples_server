@@ -1,0 +1,19 @@
+{
+  "name": "tentemples",
+  "module": "dbconnector",
+  "action": "connect",
+  "options": {
+    "client": "mysql",
+    "connection": {
+      "host": "localhost",
+      "port": 3306,
+      "user": "root",
+      "password": "root",
+      "database": "tentemples"
+    },
+    "meta": {}
+  },
+  "actionFilePath": "file:///Users/heikokanzler/Documents/Softwareprojekte/Ten%20Temples/Server/app/modules/connections/tentemples.json",
+  "serverType": "node",
+  "fileName": "tentemples.json"
+}

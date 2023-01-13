@@ -1,0 +1,60 @@
+{
+  "meta": {
+    "$_GET": [
+      {
+        "type": "text",
+        "name": "sort"
+      },
+      {
+        "type": "text",
+        "name": "dir"
+      }
+    ]
+  },
+  "exec": {
+    "steps": {
+      "name": "tenants",
+      "module": "dbconnector",
+      "action": "select",
+      "options": {
+        "connection": "tentemples",
+        "sql": {
+          "type": "SELECT",
+          "columns": [
+            {
+              "table": "tenant",
+              "column": "*"
+            }
+          ],
+          "params": [],
+          "table": {
+            "name": "tenant"
+          },
+          "primary": "tenant_id",
+          "joins": [],
+          "query": "SELECT *\nFROM tenant"
+        }
+      },
+      "output": true,
+      "meta": [
+        {
+          "type": "number",
+          "name": "tenant_id"
+        },
+        {
+          "type": "text",
+          "name": "name"
+        },
+        {
+          "type": "text",
+          "name": "title"
+        },
+        {
+          "type": "text",
+          "name": "description"
+        }
+      ],
+      "outputType": "array"
+    }
+  }
+}

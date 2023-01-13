@@ -1,0 +1,181 @@
+{
+  "meta": {
+    "$_GET": [
+      {
+        "type": "text",
+        "name": "id"
+      },
+      {
+        "type": "text",
+        "name": "sort"
+      },
+      {
+        "type": "text",
+        "name": "dir"
+      }
+    ]
+  },
+  "exec": {
+    "steps": {
+      "name": "challenge",
+      "module": "dbconnector",
+      "action": "select",
+      "options": {
+        "connection": "tentemples",
+        "sql": {
+          "type": "SELECT",
+          "columns": [
+            {
+              "table": "tournament_challenges",
+              "column": "*"
+            }
+          ],
+          "params": [
+            {
+              "operator": "equal",
+              "type": "expression",
+              "name": ":P1",
+              "value": "{{$_GET.id}}",
+              "test": ""
+            }
+          ],
+          "table": {
+            "name": "tournament_challenges"
+          },
+          "primary": "challenge_id",
+          "joins": [],
+          "wheres": {
+            "condition": "AND",
+            "rules": [
+              {
+                "id": "tournament_challenges.challenge_id",
+                "field": "tournament_challenges.challenge_id",
+                "type": "double",
+                "operator": "equal",
+                "value": "{{$_GET.id}}",
+                "data": {
+                  "table": "tournament_challenges",
+                  "column": "challenge_id",
+                  "type": "number",
+                  "columnObj": {
+                    "type": "increments",
+                    "primary": true,
+                    "nullable": false,
+                    "name": "challenge_id"
+                  }
+                },
+                "operation": "="
+              }
+            ],
+            "conditional": null,
+            "valid": true
+          },
+          "query": "SELECT *\nFROM tournament_challenges\nWHERE challenge_id = :P1 /* {{$_GET.id}} */\nORDER BY challenge_id ASC",
+          "orders": [
+            {
+              "table": "rounds",
+              "column": "challenge_id",
+              "direction": "ASC",
+              "recid": 1
+            }
+          ],
+          "sub": {
+            "rounds": {
+              "table": {
+                "name": "tournament_challenge_rounds",
+                "alias": "rounds"
+              },
+              "key": "challenge_id"
+            }
+          }
+        }
+      },
+      "output": true,
+      "meta": [
+        {
+          "type": "number",
+          "name": "challenge_id"
+        },
+        {
+          "type": "number",
+          "name": "tournament_id"
+        },
+        {
+          "type": "datetime",
+          "name": "created"
+        },
+        {
+          "type": "number",
+          "name": "player_1"
+        },
+        {
+          "type": "number",
+          "name": "player_2"
+        },
+        {
+          "type": "number",
+          "name": "winner"
+        },
+        {
+          "type": "datetime",
+          "name": "finished"
+        },
+        {
+          "type": "number",
+          "name": "stage_id"
+        },
+        {
+          "name": "rounds",
+          "type": "array",
+          "sub": [
+            {
+              "type": "number",
+              "name": "round_id"
+            },
+            {
+              "type": "number",
+              "name": "challenge_id"
+            },
+            {
+              "type": "datetime",
+              "name": "created"
+            },
+            {
+              "type": "datetime",
+              "name": "finished"
+            },
+            {
+              "type": "number",
+              "name": "attack_1"
+            },
+            {
+              "type": "number",
+              "name": "attack_2"
+            },
+            {
+              "type": "number",
+              "name": "attack_3"
+            },
+            {
+              "type": "number",
+              "name": "defense_1"
+            },
+            {
+              "type": "number",
+              "name": "defense_2"
+            },
+            {
+              "type": "number",
+              "name": "defense_3"
+            },
+            {
+              "type": "number",
+              "name": "winner"
+            }
+          ]
+        }
+      ],
+      "outputType": "array"
+    }
+  }
+}

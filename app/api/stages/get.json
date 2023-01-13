@@ -1,0 +1,111 @@
+{
+  "meta": {
+    "$_GET": [
+      {
+        "type": "text",
+        "name": "tournament_id"
+      },
+      {
+        "type": "text",
+        "name": "sort"
+      },
+      {
+        "type": "text",
+        "name": "dir"
+      }
+    ]
+  },
+  "exec": {
+    "steps": {
+      "name": "stages",
+      "module": "dbconnector",
+      "action": "select",
+      "options": {
+        "connection": "tentemples",
+        "sql": {
+          "type": "SELECT",
+          "columns": [
+            {
+              "table": "tournament_stages",
+              "column": "*"
+            }
+          ],
+          "params": [
+            {
+              "operator": "equal",
+              "type": "expression",
+              "name": ":P1",
+              "value": "{{$_GET.tournament_id}}",
+              "test": ""
+            }
+          ],
+          "table": {
+            "name": "tournament_stages"
+          },
+          "primary": "stage_id",
+          "joins": [],
+          "wheres": {
+            "condition": "AND",
+            "rules": [
+              {
+                "id": "tournament_stages.tournament_id",
+                "field": "tournament_stages.tournament_id",
+                "type": "double",
+                "operator": "equal",
+                "value": "{{$_GET.tournament_id}}",
+                "data": {
+                  "table": "tournament_stages",
+                  "column": "tournament_id",
+                  "type": "number",
+                  "columnObj": {
+                    "type": "reference",
+                    "primary": false,
+                    "nullable": true,
+                    "references": "tournament_id",
+                    "inTable": "tournaments",
+                    "referenceType": "integer",
+                    "onUpdate": "CASCADE",
+                    "onDelete": "CASCADE",
+                    "name": "tournament_id"
+                  }
+                },
+                "operation": "="
+              }
+            ],
+            "conditional": null,
+            "valid": true
+          },
+          "query": "SELECT *\nFROM tournament_stages\nWHERE tournament_id = :P1 /* {{$_GET.tournament_id}} */"
+        }
+      },
+      "output": true,
+      "meta": [
+        {
+          "type": "number",
+          "name": "stage_id"
+        },
+        {
+          "type": "number",
+          "name": "tournament_id"
+        },
+        {
+          "type": "text",
+          "name": "title"
+        },
+        {
+          "type": "text",
+          "name": "description"
+        },
+        {
+          "type": "text",
+          "name": "background_image"
+        },
+        {
+          "type": "text",
+          "name": "difficulty"
+        }
+      ],
+      "outputType": "array"
+    }
+  }
+}

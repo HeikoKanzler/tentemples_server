@@ -1,0 +1,1013 @@
+{
+  "meta": {
+    "$_GET": [
+      {
+        "type": "text",
+        "name": "sort"
+      },
+      {
+        "type": "text",
+        "name": "dir"
+      }
+    ],
+    "$_POST": [
+      {
+        "type": "number",
+        "name": "p2_a1"
+      },
+      {
+        "type": "number",
+        "name": "p2_a2"
+      },
+      {
+        "type": "number",
+        "name": "p2_a3"
+      },
+      {
+        "type": "number",
+        "name": "p2_d1"
+      },
+      {
+        "type": "number",
+        "name": "p2_d2"
+      },
+      {
+        "type": "number",
+        "name": "p2_d3"
+      },
+      {
+        "type": "number",
+        "name": "round_id"
+      },
+      {
+        "type": "number",
+        "name": "challenge_id"
+      },
+      {
+        "type": "number",
+        "name": "winner"
+      }
+    ]
+  },
+  "exec": {
+    "steps": [
+      {
+        "name": "",
+        "options": {
+          "comment": "Check if response is allowed"
+        }
+      },
+      {
+        "name": "check_round",
+        "module": "dbconnector",
+        "action": "select",
+        "options": {
+          "connection": "tentemples",
+          "sql": {
+            "type": "SELECT",
+            "columns": [],
+            "params": [
+              {
+                "operator": "equal",
+                "type": "expression",
+                "name": ":P1",
+                "value": "{{$_POST.round_id}}",
+                "test": ""
+              }
+            ],
+            "table": {
+              "name": "tournament_challenge_rounds"
+            },
+            "primary": "round_id",
+            "joins": [],
+            "wheres": {
+              "condition": "AND",
+              "rules": [
+                {
+                  "id": "tournament_challenge_rounds.round_id",
+                  "field": "tournament_challenge_rounds.round_id",
+                  "type": "double",
+                  "operator": "equal",
+                  "value": "{{$_POST.round_id}}",
+                  "data": {
+                    "table": "tournament_challenge_rounds",
+                    "column": "round_id",
+                    "type": "number",
+                    "columnObj": {
+                      "type": "increments",
+                      "primary": true,
+                      "nullable": false,
+                      "name": "round_id"
+                    }
+                  },
+                  "operation": "="
+                }
+              ],
+              "conditional": null,
+              "valid": true
+            },
+            "query": "SELECT *\nFROM tournament_challenge_rounds\nWHERE round_id = :P1 /* {{$_POST.round_id}} */"
+          }
+        },
+        "meta": [
+          {
+            "type": "number",
+            "name": "round_id"
+          },
+          {
+            "type": "number",
+            "name": "challenge_id"
+          },
+          {
+            "type": "datetime",
+            "name": "created"
+          },
+          {
+            "type": "datetime",
+            "name": "finished"
+          },
+          {
+            "type": "number",
+            "name": "p1_a1"
+          },
+          {
+            "type": "number",
+            "name": "p1_a2"
+          },
+          {
+            "type": "number",
+            "name": "p1_a3"
+          },
+          {
+            "type": "number",
+            "name": "p1_d1"
+          },
+          {
+            "type": "number",
+            "name": "p1_d2"
+          },
+          {
+            "type": "number",
+            "name": "p1_d3"
+          },
+          {
+            "type": "number",
+            "name": "winner"
+          },
+          {
+            "type": "number",
+            "name": "p2_a1"
+          },
+          {
+            "type": "number",
+            "name": "p2_a2"
+          },
+          {
+            "type": "number",
+            "name": "p2_a3"
+          },
+          {
+            "type": "number",
+            "name": "p2_d1"
+          },
+          {
+            "type": "number",
+            "name": "p2_d2"
+          },
+          {
+            "type": "number",
+            "name": "p2_d3"
+          },
+          {
+            "type": "number",
+            "name": "p1_hits"
+          },
+          {
+            "type": "number",
+            "name": "p2_hits"
+          }
+        ],
+        "outputType": "array"
+      },
+      {
+        "name": "",
+        "module": "core",
+        "action": "condition",
+        "options": {
+          "if": "{{check_round}}",
+          "then": {
+            "steps": [
+              {
+                "name": "update",
+                "module": "dbupdater",
+                "action": "update",
+                "options": {
+                  "connection": "tentemples",
+                  "sql": {
+                    "type": "update",
+                    "values": [
+                      {
+                        "table": "tournament_challenge_rounds",
+                        "column": "p2_a1",
+                        "type": "number",
+                        "value": "{{$_POST.p2_a1}}"
+                      },
+                      {
+                        "table": "tournament_challenge_rounds",
+                        "column": "p2_a2",
+                        "type": "number",
+                        "value": "{{$_POST.p2_a2}}"
+                      },
+                      {
+                        "table": "tournament_challenge_rounds",
+                        "column": "p2_a3",
+                        "type": "number",
+                        "value": "{{$_POST.p2_a3}}"
+                      },
+                      {
+                        "table": "tournament_challenge_rounds",
+                        "column": "p2_d1",
+                        "type": "number",
+                        "value": "{{$_POST.p2_d1}}"
+                      },
+                      {
+                        "table": "tournament_challenge_rounds",
+                        "column": "p2_d2",
+                        "type": "number",
+                        "value": "{{$_POST.p2_d2}}"
+                      },
+                      {
+                        "table": "tournament_challenge_rounds",
+                        "column": "p2_d3",
+                        "type": "number",
+                        "value": "{{$_POST.p2_d3}}"
+                      }
+                    ],
+                    "table": "tournament_challenge_rounds",
+                    "wheres": {
+                      "condition": "AND",
+                      "rules": [
+                        {
+                          "id": "round_id",
+                          "type": "double",
+                          "operator": "equal",
+                          "value": "{{$_POST.round_id}}",
+                          "data": {
+                            "column": "round_id"
+                          },
+                          "operation": "="
+                        }
+                      ]
+                    },
+                    "returning": "round_id",
+                    "query": "UPDATE tournament_challenge_rounds\nSET p2_a1 = :P1 /* {{$_POST.p2_a1}} */, p2_a2 = :P2 /* {{$_POST.p2_a2}} */, p2_a3 = :P3 /* {{$_POST.p2_a3}} */, p2_d1 = :P4 /* {{$_POST.p2_d1}} */, p2_d2 = :P5 /* {{$_POST.p2_d2}} */, p2_d3 = :P6 /* {{$_POST.p2_d3}} */\nWHERE round_id = :P7 /* {{$_POST.round_id}} */",
+                    "params": [
+                      {
+                        "name": ":P1",
+                        "type": "expression",
+                        "value": "{{$_POST.p2_a1}}",
+                        "test": ""
+                      },
+                      {
+                        "name": ":P2",
+                        "type": "expression",
+                        "value": "{{$_POST.p2_a2}}",
+                        "test": ""
+                      },
+                      {
+                        "name": ":P3",
+                        "type": "expression",
+                        "value": "{{$_POST.p2_a3}}",
+                        "test": ""
+                      },
+                      {
+                        "name": ":P4",
+                        "type": "expression",
+                        "value": "{{$_POST.p2_d1}}",
+                        "test": ""
+                      },
+                      {
+                        "name": ":P5",
+                        "type": "expression",
+                        "value": "{{$_POST.p2_d2}}",
+                        "test": ""
+                      },
+                      {
+                        "name": ":P6",
+                        "type": "expression",
+                        "value": "{{$_POST.p2_d3}}",
+                        "test": ""
+                      },
+                      {
+                        "operator": "equal",
+                        "type": "expression",
+                        "name": ":P7",
+                        "value": "{{$_POST.round_id}}",
+                        "test": ""
+                      }
+                    ]
+                  }
+                },
+                "meta": [
+                  {
+                    "name": "affected",
+                    "type": "number"
+                  }
+                ],
+                "output": false
+              },
+              {
+                "name": "refresh_round",
+                "module": "dbconnector",
+                "action": "select",
+                "options": {
+                  "connection": "tentemples",
+                  "sql": {
+                    "type": "SELECT",
+                    "columns": [],
+                    "params": [
+                      {
+                        "operator": "equal",
+                        "type": "expression",
+                        "name": ":P1",
+                        "value": "{{$_POST.round_id}}",
+                        "test": ""
+                      }
+                    ],
+                    "table": {
+                      "name": "tournament_challenge_rounds"
+                    },
+                    "primary": "round_id",
+                    "joins": [],
+                    "wheres": {
+                      "condition": "AND",
+                      "rules": [
+                        {
+                          "id": "tournament_challenge_rounds.round_id",
+                          "field": "tournament_challenge_rounds.round_id",
+                          "type": "double",
+                          "operator": "equal",
+                          "value": "{{$_POST.round_id}}",
+                          "data": {
+                            "table": "tournament_challenge_rounds",
+                            "column": "round_id",
+                            "type": "number",
+                            "columnObj": {
+                              "type": "increments",
+                              "primary": true,
+                              "nullable": false,
+                              "name": "round_id"
+                            }
+                          },
+                          "operation": "="
+                        }
+                      ],
+                      "conditional": null,
+                      "valid": true
+                    },
+                    "query": "SELECT *\nFROM tournament_challenge_rounds\nWHERE round_id = :P1 /* {{$_POST.round_id}} */"
+                  }
+                },
+                "meta": [
+                  {
+                    "type": "number",
+                    "name": "round_id"
+                  },
+                  {
+                    "type": "number",
+                    "name": "challenge_id"
+                  },
+                  {
+                    "type": "datetime",
+                    "name": "created"
+                  },
+                  {
+                    "type": "datetime",
+                    "name": "finished"
+                  },
+                  {
+                    "type": "number",
+                    "name": "p1_a1"
+                  },
+                  {
+                    "type": "number",
+                    "name": "p1_a2"
+                  },
+                  {
+                    "type": "number",
+                    "name": "p1_a3"
+                  },
+                  {
+                    "type": "number",
+                    "name": "p1_d1"
+                  },
+                  {
+                    "type": "number",
+                    "name": "p1_d2"
+                  },
+                  {
+                    "type": "number",
+                    "name": "p1_d3"
+                  },
+                  {
+                    "type": "number",
+                    "name": "winner"
+                  },
+                  {
+                    "type": "number",
+                    "name": "p2_a1"
+                  },
+                  {
+                    "type": "number",
+                    "name": "p2_a2"
+                  },
+                  {
+                    "type": "number",
+                    "name": "p2_a3"
+                  },
+                  {
+                    "type": "number",
+                    "name": "p2_d1"
+                  },
+                  {
+                    "type": "number",
+                    "name": "p2_d2"
+                  },
+                  {
+                    "type": "number",
+                    "name": "p2_d3"
+                  },
+                  {
+                    "type": "number",
+                    "name": "p1_hits"
+                  },
+                  {
+                    "type": "number",
+                    "name": "p2_hits"
+                  }
+                ],
+                "outputType": "array"
+              },
+              {
+                "name": "calculate_p1_hits",
+                "module": "runjs",
+                "action": "run",
+                "options": {
+                  "data": {
+                    "data": "{{refresh_round[0]}}"
+                  },
+                  "code": "var hits = 0;\nif ( data.p1_a1!=data.p2_d1 ) hits=hits+1\nif ( data.p1_a2!=data.p2_d2 ) hits=hits+1\nif ( data.p1_a3!=data.p2_d3 ) hits=hits+1\nreturn hits;"
+                },
+                "output": false
+              },
+              {
+                "name": "calculate_p2_hits",
+                "module": "runjs",
+                "action": "run",
+                "options": {
+                  "data": {
+                    "data": "{{refresh_round[0]}}"
+                  },
+                  "code": "var hits = 0;\nif ( data.p2_a1!=data.p1_d1 ) hits=hits+1\nif ( data.p2_a2!=data.p1_d2 ) hits=hits+1\nif ( data.p2_a3!=data.p1_d3 ) hits=hits+1\nreturn hits;"
+                },
+                "output": false
+              },
+              {
+                "name": "determine_winner",
+                "module": "runjs",
+                "action": "run",
+                "options": {
+                  "data": {
+                    "p1": "{{calculate_p1_hits}}",
+                    "p2": "{{calculate_p2_hits}}"
+                  },
+                  "code": "if ( p1 == p2 ) {\n\treturn 0; // draw\n} \nif ( p1 > p2 ) {\n\treturn 1;\n} \nif ( p2 > p1 ) {\n\treturn 2;\n} "
+                },
+                "output": false
+              },
+              {
+                "name": "",
+                "options": {
+                  "comment": "Get winner ID and update challenge with database ID, in case of a draw, keep \"0\""
+                }
+              },
+              {
+                "name": "get_players_for_challenge",
+                "module": "dbconnector",
+                "action": "single",
+                "options": {
+                  "connection": "tentemples",
+                  "sql": {
+                    "type": "SELECT",
+                    "columns": [
+                      {
+                        "table": "tournament_challenges",
+                        "column": "player_1"
+                      },
+                      {
+                        "table": "tournament_challenges",
+                        "column": "player_2"
+                      }
+                    ],
+                    "params": [
+                      {
+                        "operator": "equal",
+                        "type": "expression",
+                        "name": ":P1",
+                        "value": "{{$_POST.challenge_id}}",
+                        "test": ""
+                      }
+                    ],
+                    "table": {
+                      "name": "tournament_challenges"
+                    },
+                    "primary": "challenge_id",
+                    "joins": [],
+                    "wheres": {
+                      "condition": "AND",
+                      "rules": [
+                        {
+                          "id": "tournament_challenges.challenge_id",
+                          "field": "tournament_challenges.challenge_id",
+                          "type": "double",
+                          "operator": "equal",
+                          "value": "{{$_POST.challenge_id}}",
+                          "data": {
+                            "table": "tournament_challenges",
+                            "column": "challenge_id",
+                            "type": "number",
+                            "columnObj": {
+                              "type": "increments",
+                              "primary": true,
+                              "nullable": false,
+                              "name": "challenge_id"
+                            }
+                          },
+                          "operation": "="
+                        }
+                      ],
+                      "conditional": null,
+                      "valid": true
+                    },
+                    "query": "SELECT player_1, player_2\nFROM tournament_challenges\nWHERE challenge_id = :P1 /* {{$_POST.challenge_id}} */"
+                  }
+                },
+                "meta": [
+                  {
+                    "type": "number",
+                    "name": "player_1"
+                  },
+                  {
+                    "type": "number",
+                    "name": "player_2"
+                  }
+                ],
+                "outputType": "object"
+              },
+              {
+                "name": "winner",
+                "module": "core",
+                "action": "setvalue",
+                "options": {
+                  "value": 0
+                },
+                "meta": [],
+                "outputType": "text",
+                "output": false
+              },
+              {
+                "name": "",
+                "module": "core",
+                "action": "condition",
+                "options": {
+                  "if": "{{determine_winner==1}}",
+                  "then": {
+                    "steps": {
+                      "name": "winner",
+                      "module": "core",
+                      "action": "setvalue",
+                      "options": {
+                        "value": "{{get_challenge.player_1}}"
+                      },
+                      "meta": [],
+                      "outputType": "text",
+                      "output": false
+                    }
+                  }
+                },
+                "outputType": "boolean"
+              },
+              {
+                "name": "",
+                "module": "core",
+                "action": "condition",
+                "options": {
+                  "if": "{{determine_winner==2}}",
+                  "then": {
+                    "steps": {
+                      "name": "winner",
+                      "module": "core",
+                      "action": "setvalue",
+                      "options": {
+                        "value": "{{get_challenge.player_2}}"
+                      },
+                      "meta": [],
+                      "outputType": "text",
+                      "output": false
+                    }
+                  }
+                },
+                "outputType": "boolean"
+              },
+              {
+                "name": "update_round",
+                "module": "dbupdater",
+                "action": "update",
+                "options": {
+                  "connection": "tentemples",
+                  "sql": {
+                    "type": "update",
+                    "values": [
+                      {
+                        "table": "tournament_challenge_rounds",
+                        "column": "challenge_id",
+                        "type": "number",
+                        "value": "{{$_POST.challenge_id}}"
+                      },
+                      {
+                        "table": "tournament_challenge_rounds",
+                        "column": "finished",
+                        "type": "datetime",
+                        "value": "{{NOW}}"
+                      },
+                      {
+                        "table": "tournament_challenge_rounds",
+                        "column": "winner",
+                        "type": "number",
+                        "value": "{{determine_winner}}"
+                      },
+                      {
+                        "table": "tournament_challenge_rounds",
+                        "column": "p1_hits",
+                        "type": "number",
+                        "value": "{{calculate_p1_hits}}"
+                      },
+                      {
+                        "table": "tournament_challenge_rounds",
+                        "column": "p2_hits",
+                        "type": "number",
+                        "value": "{{calculate_p2_hits}}"
+                      }
+                    ],
+                    "table": "tournament_challenge_rounds",
+                    "wheres": {
+                      "condition": "AND",
+                      "rules": [
+                        {
+                          "id": "round_id",
+                          "type": "double",
+                          "operator": "equal",
+                          "value": "{{$_POST.round_id}}",
+                          "data": {
+                            "column": "round_id"
+                          },
+                          "operation": "="
+                        }
+                      ]
+                    },
+                    "returning": "round_id",
+                    "query": "UPDATE tournament_challenge_rounds\nSET challenge_id = :P1 /* {{$_POST.challenge_id}} */, finished = :P2 /* {{NOW}} */, winner = :P3 /* {{determine_winner}} */, p1_hits = :P4 /* {{calculate_p1_hits}} */, p2_hits = :P5 /* {{calculate_p2_hits}} */\nWHERE round_id = :P6 /* {{$_POST.round_id}} */",
+                    "params": [
+                      {
+                        "name": ":P1",
+                        "type": "expression",
+                        "value": "{{$_POST.challenge_id}}",
+                        "test": ""
+                      },
+                      {
+                        "name": ":P2",
+                        "type": "expression",
+                        "value": "{{NOW}}",
+                        "test": ""
+                      },
+                      {
+                        "name": ":P3",
+                        "type": "expression",
+                        "value": "{{determine_winner}}",
+                        "test": ""
+                      },
+                      {
+                        "name": ":P4",
+                        "type": "expression",
+                        "value": "{{calculate_p1_hits}}",
+                        "test": ""
+                      },
+                      {
+                        "name": ":P5",
+                        "type": "expression",
+                        "value": "{{calculate_p2_hits}}",
+                        "test": ""
+                      },
+                      {
+                        "operator": "equal",
+                        "type": "expression",
+                        "name": ":P6",
+                        "value": "{{$_POST.round_id}}",
+                        "test": ""
+                      }
+                    ]
+                  }
+                },
+                "meta": [
+                  {
+                    "name": "affected",
+                    "type": "number"
+                  }
+                ],
+                "output": false
+              },
+              {
+                "name": "result",
+                "module": "dbconnector",
+                "action": "select",
+                "options": {
+                  "connection": "tentemples",
+                  "sql": {
+                    "type": "SELECT",
+                    "columns": [],
+                    "params": [
+                      {
+                        "operator": "equal",
+                        "type": "expression",
+                        "name": ":P1",
+                        "value": "{{$_POST.round_id}}",
+                        "test": ""
+                      }
+                    ],
+                    "table": {
+                      "name": "tournament_challenge_rounds"
+                    },
+                    "primary": "round_id",
+                    "joins": [],
+                    "wheres": {
+                      "condition": "AND",
+                      "rules": [
+                        {
+                          "id": "tournament_challenge_rounds.round_id",
+                          "field": "tournament_challenge_rounds.round_id",
+                          "type": "double",
+                          "operator": "equal",
+                          "value": "{{$_POST.round_id}}",
+                          "data": {
+                            "table": "tournament_challenge_rounds",
+                            "column": "round_id",
+                            "type": "number",
+                            "columnObj": {
+                              "type": "increments",
+                              "primary": true,
+                              "nullable": false,
+                              "name": "round_id"
+                            }
+                          },
+                          "operation": "="
+                        }
+                      ],
+                      "conditional": null,
+                      "valid": true
+                    },
+                    "query": "SELECT *\nFROM tournament_challenge_rounds\nWHERE round_id = :P1 /* {{$_POST.round_id}} */"
+                  }
+                },
+                "meta": [
+                  {
+                    "type": "number",
+                    "name": "round_id"
+                  },
+                  {
+                    "type": "number",
+                    "name": "challenge_id"
+                  },
+                  {
+                    "type": "datetime",
+                    "name": "created"
+                  },
+                  {
+                    "type": "datetime",
+                    "name": "finished"
+                  },
+                  {
+                    "type": "number",
+                    "name": "p1_a1"
+                  },
+                  {
+                    "type": "number",
+                    "name": "p1_a2"
+                  },
+                  {
+                    "type": "number",
+                    "name": "p1_a3"
+                  },
+                  {
+                    "type": "number",
+                    "name": "p1_d1"
+                  },
+                  {
+                    "type": "number",
+                    "name": "p1_d2"
+                  },
+                  {
+                    "type": "number",
+                    "name": "p1_d3"
+                  },
+                  {
+                    "type": "number",
+                    "name": "winner"
+                  },
+                  {
+                    "type": "number",
+                    "name": "p2_a1"
+                  },
+                  {
+                    "type": "number",
+                    "name": "p2_a2"
+                  },
+                  {
+                    "type": "number",
+                    "name": "p2_a3"
+                  },
+                  {
+                    "type": "number",
+                    "name": "p2_d1"
+                  },
+                  {
+                    "type": "number",
+                    "name": "p2_d2"
+                  },
+                  {
+                    "type": "number",
+                    "name": "p2_d3"
+                  },
+                  {
+                    "type": "number",
+                    "name": "p1_hits"
+                  },
+                  {
+                    "type": "number",
+                    "name": "p2_hits"
+                  }
+                ],
+                "outputType": "array"
+              },
+              {
+                "name": "",
+                "options": {
+                  "comment": "Return result to the game client"
+                }
+              },
+              {
+                "name": "round_result",
+                "module": "core",
+                "action": "group",
+                "options": {
+                  "exec": {
+                    "steps": [
+                      {
+                        "name": "winner",
+                        "module": "dbconnector",
+                        "action": "select",
+                        "options": {
+                          "connection": "tentemples",
+                          "sql": {
+                            "type": "SELECT",
+                            "columns": [
+                              {
+                                "table": "player",
+                                "column": "internal_name"
+                              },
+                              {
+                                "table": "player",
+                                "column": "score"
+                              },
+                              {
+                                "table": "player",
+                                "column": "dan"
+                              }
+                            ],
+                            "params": [
+                              {
+                                "operator": "equal",
+                                "type": "expression",
+                                "name": ":P1",
+                                "value": "{{result[0].winner}}",
+                                "test": ""
+                              }
+                            ],
+                            "table": {
+                              "name": "player"
+                            },
+                            "primary": "player_id",
+                            "joins": [],
+                            "wheres": {
+                              "condition": "AND",
+                              "rules": [
+                                {
+                                  "id": "player.player_id",
+                                  "field": "player.player_id",
+                                  "type": "double",
+                                  "operator": "equal",
+                                  "value": "{{result[0].winner}}",
+                                  "data": {
+                                    "table": "player",
+                                    "column": "player_id",
+                                    "type": "number",
+                                    "columnObj": {
+                                      "type": "increments",
+                                      "primary": true,
+                                      "nullable": false,
+                                      "name": "player_id"
+                                    }
+                                  },
+                                  "operation": "="
+                                }
+                              ],
+                              "conditional": null,
+                              "valid": true
+                            },
+                            "query": "SELECT internal_name, score, dan\nFROM player\nWHERE player_id = :P1 /* {{result[0].winner}} */"
+                          }
+                        },
+                        "meta": [
+                          {
+                            "type": "text",
+                            "name": "internal_name"
+                          },
+                          {
+                            "type": "number",
+                            "name": "score"
+                          },
+                          {
+                            "type": "number",
+                            "name": "dan"
+                          }
+                        ],
+                        "outputType": "array",
+                        "output": true
+                      },
+                      {
+                        "name": "hits",
+                        "module": "core",
+                        "action": "group",
+                        "options": {
+                          "exec": {
+                            "steps": [
+                              {
+                                "name": "player1",
+                                "module": "core",
+                                "action": "setvalue",
+                                "options": {
+                                  "value": "{{calculate_p1_hits}}"
+                                },
+                                "meta": [],
+                                "outputType": "text",
+                                "output": true
+                              },
+                              {
+                                "name": "player2",
+                                "module": "core",
+                                "action": "setvalue",
+                                "options": {
+                                  "value": "{{calculate_p2_hits}}"
+                                },
+                                "meta": [],
+                                "outputType": "text",
+                                "output": true
+                              }
+                            ]
+                          }
+                        },
+                        "output": true
+                      }
+                    ]
+                  }
+                },
+                "output": true
+              }
+            ]
+          },
+          "else": {
+            "steps": {
+              "name": "no_round",
+              "module": "core",
+              "action": "response",
+              "options": {
+                "status": 404,
+                "data": "No round to respond"
+              }
+            }
+          }
+        },
+        "outputType": "boolean"
+      }
+    ]
+  }
+}

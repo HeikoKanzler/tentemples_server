@@ -1,0 +1,437 @@
+{
+  "meta": {
+    "$_POST": [
+      {
+        "type": "number",
+        "name": "p1_a1"
+      },
+      {
+        "type": "number",
+        "name": "p1_a2"
+      },
+      {
+        "type": "number",
+        "name": "p1_a3"
+      },
+      {
+        "type": "number",
+        "name": "p1_d1"
+      },
+      {
+        "type": "number",
+        "name": "p1_d2"
+      },
+      {
+        "type": "number",
+        "name": "p1_d3"
+      },
+      {
+        "type": "number",
+        "name": "tournament_id"
+      },
+      {
+        "type": "number",
+        "name": "player_1"
+      },
+      {
+        "type": "number",
+        "name": "player_2"
+      },
+      {
+        "type": "number",
+        "name": "stage_id"
+      }
+    ]
+  },
+  "exec": {
+    "steps": [
+      {
+        "name": "",
+        "options": {
+          "comment": "Check if a challenge for this players in this tournament already exists \n"
+        }
+      },
+      {
+        "name": "check_challenges",
+        "module": "dbconnector",
+        "action": "single",
+        "options": {
+          "connection": "tentemples",
+          "sql": {
+            "type": "SELECT",
+            "columns": [],
+            "params": [
+              {
+                "operator": "equal",
+                "type": "expression",
+                "name": ":P1",
+                "value": "{{$_POST.tournament_id}}",
+                "test": ""
+              },
+              {
+                "operator": "equal",
+                "type": "expression",
+                "name": ":P2",
+                "value": "{{$_POST.player_1}}",
+                "test": ""
+              },
+              {
+                "operator": "equal",
+                "type": "expression",
+                "name": ":P3",
+                "value": "{{$_POST.player_2}}",
+                "test": ""
+              }
+            ],
+            "table": {
+              "name": "tournament_challenges"
+            },
+            "primary": "challenge_id",
+            "joins": [],
+            "wheres": {
+              "condition": "AND",
+              "rules": [
+                {
+                  "id": "tournament_challenges.tournament_id",
+                  "field": "tournament_challenges.tournament_id",
+                  "type": "double",
+                  "operator": "equal",
+                  "value": "{{$_POST.tournament_id}}",
+                  "data": {
+                    "table": "tournament_challenges",
+                    "column": "tournament_id",
+                    "type": "number",
+                    "columnObj": {
+                      "type": "reference",
+                      "primary": false,
+                      "nullable": true,
+                      "references": "tournament_id",
+                      "inTable": "tournaments",
+                      "referenceType": "integer",
+                      "onUpdate": "CASCADE",
+                      "onDelete": "CASCADE",
+                      "name": "tournament_id"
+                    }
+                  },
+                  "operation": "="
+                },
+                {
+                  "id": "tournament_challenges.player_1",
+                  "field": "tournament_challenges.player_1",
+                  "type": "double",
+                  "operator": "equal",
+                  "value": "{{$_POST.player_1}}",
+                  "data": {
+                    "table": "tournament_challenges",
+                    "column": "player_1",
+                    "type": "number",
+                    "columnObj": {
+                      "type": "integer",
+                      "primary": false,
+                      "nullable": true,
+                      "name": "player_1"
+                    }
+                  },
+                  "operation": "="
+                },
+                {
+                  "id": "tournament_challenges.player_2",
+                  "field": "tournament_challenges.player_2",
+                  "type": "double",
+                  "operator": "equal",
+                  "value": "{{$_POST.player_2}}",
+                  "data": {
+                    "table": "tournament_challenges",
+                    "column": "player_2",
+                    "type": "number",
+                    "columnObj": {
+                      "type": "integer",
+                      "primary": false,
+                      "nullable": true,
+                      "name": "player_2"
+                    }
+                  },
+                  "operation": "="
+                }
+              ],
+              "conditional": null,
+              "valid": true
+            },
+            "query": "SELECT *\nFROM tournament_challenges\nWHERE tournament_id = :P1 /* {{$_POST.tournament_id}} */ AND player_1 = :P2 /* {{$_POST.player_1}} */ AND player_2 = :P3 /* {{$_POST.player_2}} */"
+          }
+        },
+        "output": true,
+        "meta": [
+          {
+            "type": "number",
+            "name": "challenge_id"
+          },
+          {
+            "type": "number",
+            "name": "tournament_id"
+          },
+          {
+            "type": "datetime",
+            "name": "created"
+          },
+          {
+            "type": "number",
+            "name": "player_1"
+          },
+          {
+            "type": "number",
+            "name": "player_2"
+          },
+          {
+            "type": "number",
+            "name": "winner"
+          },
+          {
+            "type": "datetime",
+            "name": "finished"
+          },
+          {
+            "type": "number",
+            "name": "stage_id"
+          }
+        ],
+        "outputType": "object"
+      },
+      {
+        "name": "",
+        "module": "core",
+        "action": "condition",
+        "options": {
+          "if": "{{check_challenges}}",
+          "then": {
+            "steps": [
+              {
+                "name": "",
+                "options": {
+                  "comment": "There's already a challenge between this two players"
+                }
+              },
+              {
+                "name": "challenge_created",
+                "module": "core",
+                "action": "response",
+                "options": {
+                  "status": 403,
+                  "data": "Challenge already created"
+                }
+              }
+            ]
+          },
+          "else": {
+            "steps": [
+              {
+                "name": "",
+                "options": {
+                  "comment": "Insert new challenge into database"
+                }
+              },
+              {
+                "name": "create_challenge",
+                "module": "dbupdater",
+                "action": "insert",
+                "options": {
+                  "connection": "tentemples",
+                  "sql": {
+                    "type": "insert",
+                    "values": [
+                      {
+                        "table": "tournament_challenges",
+                        "column": "tournament_id",
+                        "type": "number",
+                        "value": "{{$_POST.tournament_id}}"
+                      },
+                      {
+                        "table": "tournament_challenges",
+                        "column": "player_1",
+                        "type": "number",
+                        "value": "{{$_POST.player_1}}"
+                      },
+                      {
+                        "table": "tournament_challenges",
+                        "column": "player_2",
+                        "type": "number",
+                        "value": "{{$_POST.player_2}}"
+                      },
+                      {
+                        "table": "tournament_challenges",
+                        "column": "stage_id",
+                        "type": "number",
+                        "value": "{{$_POST.stage_id}}"
+                      }
+                    ],
+                    "table": "tournament_challenges",
+                    "returning": "challenge_id",
+                    "query": "INSERT INTO tournament_challenges\n(tournament_id, player_1, player_2, stage_id) VALUES (:P1 /* {{$_POST.tournament_id}} */, :P2 /* {{$_POST.player_1}} */, :P3 /* {{$_POST.player_2}} */, :P4 /* {{$_POST.stage_id}} */)",
+                    "params": [
+                      {
+                        "name": ":P1",
+                        "type": "expression",
+                        "value": "{{$_POST.tournament_id}}",
+                        "test": ""
+                      },
+                      {
+                        "name": ":P2",
+                        "type": "expression",
+                        "value": "{{$_POST.player_1}}",
+                        "test": ""
+                      },
+                      {
+                        "name": ":P3",
+                        "type": "expression",
+                        "value": "{{$_POST.player_2}}",
+                        "test": ""
+                      },
+                      {
+                        "name": ":P4",
+                        "type": "expression",
+                        "value": "{{$_POST.stage_id}}",
+                        "test": ""
+                      }
+                    ]
+                  }
+                },
+                "meta": [
+                  {
+                    "name": "identity",
+                    "type": "text"
+                  },
+                  {
+                    "name": "affected",
+                    "type": "number"
+                  }
+                ]
+              },
+              {
+                "name": "create_round",
+                "module": "dbupdater",
+                "action": "insert",
+                "options": {
+                  "connection": "tentemples",
+                  "sql": {
+                    "type": "insert",
+                    "values": [
+                      {
+                        "table": "tournament_challenge_rounds",
+                        "column": "challenge_id",
+                        "type": "number",
+                        "value": "{{create_challenge.identity}}"
+                      },
+                      {
+                        "table": "tournament_challenge_rounds",
+                        "column": "p1_a1",
+                        "type": "number",
+                        "value": "{{$_POST.p1_a1}}"
+                      },
+                      {
+                        "table": "tournament_challenge_rounds",
+                        "column": "p1_a2",
+                        "type": "number",
+                        "value": "{{$_POST.p1_a2}}"
+                      },
+                      {
+                        "table": "tournament_challenge_rounds",
+                        "column": "p1_a3",
+                        "type": "number",
+                        "value": "{{$_POST.p1_a3}}"
+                      },
+                      {
+                        "table": "tournament_challenge_rounds",
+                        "column": "p1_d1",
+                        "type": "number",
+                        "value": "{{$_POST.p1_d1}}"
+                      },
+                      {
+                        "table": "tournament_challenge_rounds",
+                        "column": "p1_d2",
+                        "type": "number",
+                        "value": "{{$_POST.p1_d2}}"
+                      },
+                      {
+                        "table": "tournament_challenge_rounds",
+                        "column": "p1_d3",
+                        "type": "number",
+                        "value": "{{$_POST.p1_d3}}"
+                      }
+                    ],
+                    "table": "tournament_challenge_rounds",
+                    "returning": "round_id",
+                    "query": "INSERT INTO tournament_challenge_rounds\n(challenge_id, p1_a1, p1_a2, p1_a3, p1_d1, p1_d2, p1_d3) VALUES (:P1 /* {{create_challenge.identity}} */, :P2 /* {{$_POST.p1_a1}} */, :P3 /* {{$_POST.p1_a2}} */, :P4 /* {{$_POST.p1_a3}} */, :P5 /* {{$_POST.p1_d1}} */, :P6 /* {{$_POST.p1_d2}} */, :P7 /* {{$_POST.p1_d3}} */)",
+                    "params": [
+                      {
+                        "name": ":P1",
+                        "type": "expression",
+                        "value": "{{create_challenge.identity}}",
+                        "test": ""
+                      },
+                      {
+                        "name": ":P2",
+                        "type": "expression",
+                        "value": "{{$_POST.p1_a1}}",
+                        "test": ""
+                      },
+                      {
+                        "name": ":P3",
+                        "type": "expression",
+                        "value": "{{$_POST.p1_a2}}",
+                        "test": ""
+                      },
+                      {
+                        "name": ":P4",
+                        "type": "expression",
+                        "value": "{{$_POST.p1_a3}}",
+                        "test": ""
+                      },
+                      {
+                        "name": ":P5",
+                        "type": "expression",
+                        "value": "{{$_POST.p1_d1}}",
+                        "test": ""
+                      },
+                      {
+                        "name": ":P6",
+                        "type": "expression",
+                        "value": "{{$_POST.p1_d2}}",
+                        "test": ""
+                      },
+                      {
+                        "name": ":P7",
+                        "type": "expression",
+                        "value": "{{$_POST.p1_d3}}",
+                        "test": ""
+                      }
+                    ]
+                  }
+                },
+                "meta": [
+                  {
+                    "name": "identity",
+                    "type": "text"
+                  },
+                  {
+                    "name": "affected",
+                    "type": "number"
+                  }
+                ]
+              },
+              {
+                "name": "challenge_created",
+                "module": "core",
+                "action": "response",
+                "options": {
+                  "status": 200,
+                  "data": "Challenge created"
+                }
+              }
+            ]
+          }
+        },
+        "outputType": "boolean"
+      }
+    ]
+  }
+}
