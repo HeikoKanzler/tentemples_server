@@ -1,15 +1,5 @@
 {
   "meta": {
-    "$_GET": [
-      {
-        "type": "text",
-        "name": "sort"
-      },
-      {
-        "type": "text",
-        "name": "dir"
-      }
-    ],
     "$_POST": [
       {
         "type": "number",

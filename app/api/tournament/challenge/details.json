@@ -146,31 +146,63 @@
             },
             {
               "type": "number",
-              "name": "attack_1"
+              "name": "p1_a1"
             },
             {
               "type": "number",
-              "name": "attack_2"
+              "name": "p1_a2"
             },
             {
               "type": "number",
-              "name": "attack_3"
+              "name": "p1_a3"
             },
             {
               "type": "number",
-              "name": "defense_1"
+              "name": "p1_d1"
             },
             {
               "type": "number",
-              "name": "defense_2"
+              "name": "p1_d2"
             },
             {
               "type": "number",
-              "name": "defense_3"
+              "name": "p1_d3"
             },
             {
               "type": "number",
               "name": "winner"
+            },
+            {
+              "type": "number",
+              "name": "p2_a1"
+            },
+            {
+              "type": "number",
+              "name": "p2_a2"
+            },
+            {
+              "type": "number",
+              "name": "p2_a3"
+            },
+            {
+              "type": "number",
+              "name": "p2_d1"
+            },
+            {
+              "type": "number",
+              "name": "p2_d2"
+            },
+            {
+              "type": "number",
+              "name": "p2_d3"
+            },
+            {
+              "type": "number",
+              "name": "p1_hits"
+            },
+            {
+              "type": "number",
+              "name": "p2_hits"
             }
           ]
         }
