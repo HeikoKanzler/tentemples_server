@@ -30,6 +30,17 @@
     "output": false
   },
   {
+    "name": "testing_value",
+    "module": "core",
+    "action": "setvalue",
+    "options": {
+      "value": "Hello World"
+    },
+    "meta": [],
+    "outputType": "text",
+    "output": true
+  },
+  {
     "name": "group_data",
     "module": "core",
     "action": "group",
@@ -46,18 +57,6 @@
             "meta": [],
             "outputType": "text",
             "output": false
-          },
-          {
-            "name": "calculate",
-            "module": "runjs",
-            "action": "run",
-            "options": {
-              "data": {
-                "var1": "{{post_data.data1}}",
-                "var2": "{{post_data.data2}}"
-              },
-              "code": "return var1 * var2;"
-            }
           },
           {
             "name": "data_1",
@@ -100,6 +99,19 @@
             ],
             "output": false,
             "outputType": "text"
+          },
+          {
+            "name": "calculate",
+            "module": "runjs",
+            "action": "run",
+            "options": {
+              "code": "return a * b;",
+              "data": {
+                "a": "{{data_1}}",
+                "b": "{{data_2}}"
+              }
+            },
+            "output": false
           },
           {
             "name": "result",

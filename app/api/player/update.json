@@ -1,3 +1,201 @@
 {
-  "exec": {}
+  "meta": {
+    "$_POST": [
+      {
+        "type": "text",
+        "name": "player_id"
+      },
+      {
+        "type": "text",
+        "name": "score"
+      },
+      {
+        "type": "text",
+        "name": "dan"
+      }
+    ]
+  },
+  "exec": {
+    "steps": [
+      {
+        "name": "update",
+        "module": "dbupdater",
+        "action": "update",
+        "options": {
+          "connection": "tentemples",
+          "sql": {
+            "type": "update",
+            "values": [
+              {
+                "table": "player",
+                "column": "score",
+                "type": "number",
+                "value": "{{$_POST.score}}"
+              },
+              {
+                "table": "player",
+                "column": "dan",
+                "type": "number",
+                "value": "{{$_POST.dan}}"
+              }
+            ],
+            "table": "player",
+            "wheres": {
+              "condition": "AND",
+              "rules": [
+                {
+                  "id": "player_id",
+                  "type": "double",
+                  "operator": "equal",
+                  "value": "{{$_POST.player_id}}",
+                  "data": {
+                    "column": "player_id"
+                  },
+                  "operation": "="
+                }
+              ]
+            },
+            "returning": "player_id",
+            "query": "UPDATE player\nSET score = :P1 /* {{$_POST.score}} */, dan = :P2 /* {{$_POST.dan}} */\nWHERE player_id = :P3 /* {{$_POST.player_id}} */",
+            "params": [
+              {
+                "name": ":P1",
+                "type": "expression",
+                "value": "{{$_POST.score}}",
+                "test": ""
+              },
+              {
+                "name": ":P2",
+                "type": "expression",
+                "value": "{{$_POST.dan}}",
+                "test": ""
+              },
+              {
+                "operator": "equal",
+                "type": "expression",
+                "name": ":P3",
+                "value": "{{$_POST.player_id}}",
+                "test": ""
+              }
+            ]
+          }
+        },
+        "meta": [
+          {
+            "name": "affected",
+            "type": "number"
+          }
+        ]
+      },
+      {
+        "name": "player",
+        "module": "core",
+        "action": "group",
+        "options": {
+          "exec": {
+            "steps": {
+              "name": "player",
+              "module": "dbconnector",
+              "action": "single",
+              "options": {
+                "connection": "tentemples",
+                "sql": {
+                  "type": "SELECT",
+                  "columns": [
+                    {
+                      "table": "player",
+                      "column": "player_id"
+                    },
+                    {
+                      "table": "player",
+                      "column": "name"
+                    },
+                    {
+                      "table": "player",
+                      "column": "score"
+                    },
+                    {
+                      "table": "player",
+                      "column": "dan"
+                    }
+                  ],
+                  "params": [
+                    {
+                      "operator": "equal",
+                      "type": "expression",
+                      "name": ":P1",
+                      "value": "{{$_POST.player_id}}",
+                      "test": ""
+                    }
+                  ],
+                  "table": {
+                    "name": "player"
+                  },
+                  "primary": "player_id",
+                  "joins": [],
+                  "wheres": {
+                    "condition": "AND",
+                    "rules": [
+                      {
+                        "id": "player.player_id",
+                        "field": "player.player_id",
+                        "type": "double",
+                        "operator": "equal",
+                        "value": "{{$_POST.player_id}}",
+                        "data": {
+                          "table": "player",
+                          "column": "player_id",
+                          "type": "number",
+                          "columnObj": {
+                            "type": "increments",
+                            "primary": true,
+                            "nullable": false,
+                            "name": "player_id"
+                          }
+                        },
+                        "operation": "="
+                      }
+                    ],
+                    "conditional": null,
+                    "valid": true
+                  },
+                  "query": "SELECT player_id, name, score, dan\nFROM player\nWHERE player_id = :P1 /* {{$_POST.player_id}} */"
+                }
+              },
+              "output": true,
+              "meta": [
+                {
+                  "type": "number",
+                  "name": "player_id"
+                },
+                {
+                  "type": "text",
+                  "name": "name"
+                },
+                {
+                  "type": "number",
+                  "name": "score"
+                },
+                {
+                  "type": "number",
+                  "name": "dan"
+                }
+              ],
+              "outputType": "object"
+            }
+          }
+        },
+        "output": true
+      },
+      {
+        "name": "",
+        "module": "core",
+        "action": "response",
+        "options": {
+          "status": 200,
+          "data": "{{player}}"
+        }
+      }
+    ]
+  }
 }

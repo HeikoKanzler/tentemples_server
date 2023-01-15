@@ -1,0 +1,38 @@
+{
+  "meta": {
+    "$_GET": [
+      {
+        "type": "text",
+        "name": "sort"
+      },
+      {
+        "type": "text",
+        "name": "dir"
+      }
+    ]
+  },
+  "exec": {
+    "steps": [
+      {
+        "name": "identity",
+        "module": "auth",
+        "action": "login",
+        "options": {
+          "provider": "backend_security"
+        },
+        "output": false,
+        "meta": []
+      },
+      {
+        "name": "user",
+        "module": "auth",
+        "action": "identify",
+        "options": {
+          "provider": "backend_security"
+        },
+        "output": true,
+        "meta": []
+      }
+    ]
+  }
+}

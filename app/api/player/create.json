@@ -1,0 +1,407 @@
+{
+  "meta": {
+    "$_POST": [
+      {
+        "type": "text",
+        "name": "tenant_id"
+      },
+      {
+        "type": "text",
+        "name": "name"
+      },
+      {
+        "type": "text",
+        "name": "email"
+      }
+    ]
+  },
+  "exec": {
+    "steps": [
+      {
+        "name": "",
+        "options": {
+          "comment": "Basic validation:"
+        }
+      },
+      {
+        "name": "validate_player",
+        "module": "validator",
+        "action": "validate",
+        "options": {
+          "data": [
+            {
+              "name": "tenant",
+              "value": "{{$_POST.tenant_id}}",
+              "rules": {
+                "core:required": {},
+                "core:number": {
+                  "message": "Please enter a valid tenant_id."
+                },
+                "db:exists": {
+                  "param": {
+                    "connection": "tentemples",
+                    "table": "tenant",
+                    "column": "tenant_id"
+                  },
+                  "message": "Tenant not found."
+                }
+              }
+            },
+            {
+              "name": "username",
+              "value": "{{$_POST.name}}",
+              "rules": {
+                "core:required": {},
+                "core:nowhitespace": {},
+                "core:alphanumeric": {}
+              }
+            },
+            {
+              "name": "email",
+              "value": "{{$_POST.email}}",
+              "rules": {
+                "core:required": {},
+                "core:email": {},
+                "db:notexists": {
+                  "param": {
+                    "connection": "tentemples",
+                    "table": "player",
+                    "column": "email"
+                  },
+                  "message": "Email already registered."
+                }
+              }
+            }
+          ]
+        }
+      },
+      {
+        "name": "",
+        "options": {
+          "comment": "Check if the player is already registered on tenant:"
+        }
+      },
+      {
+        "name": "get_tenant",
+        "module": "dbconnector",
+        "action": "single",
+        "options": {
+          "connection": "tentemples",
+          "sql": {
+            "type": "SELECT",
+            "columns": [
+              {
+                "table": "tenant",
+                "column": "name"
+              }
+            ],
+            "params": [],
+            "table": {
+              "name": "tenant"
+            },
+            "primary": "tenant_id",
+            "joins": [],
+            "query": "SELECT name\nFROM tenant"
+          }
+        },
+        "output": false,
+        "meta": [
+          {
+            "type": "text",
+            "name": "name"
+          }
+        ],
+        "outputType": "object"
+      },
+      {
+        "name": "full_name",
+        "module": "core",
+        "action": "setvalue",
+        "options": {
+          "value": "{{get_tenant.name+'_'+$_POST.name}}"
+        },
+        "meta": [
+          {
+            "name": "name",
+            "type": "text"
+          }
+        ],
+        "outputType": "text"
+      },
+      {
+        "name": "check_if_player_exists",
+        "module": "dbconnector",
+        "action": "single",
+        "options": {
+          "connection": "tentemples",
+          "sql": {
+            "type": "SELECT",
+            "columns": [
+              {
+                "table": "player",
+                "column": "player_id"
+              }
+            ],
+            "params": [
+              {
+                "operator": "equal",
+                "type": "expression",
+                "name": ":P1",
+                "value": "{{full_name}}",
+                "test": ""
+              }
+            ],
+            "table": {
+              "name": "player"
+            },
+            "primary": "player_id",
+            "joins": [],
+            "wheres": {
+              "condition": "AND",
+              "rules": [
+                {
+                  "id": "player.internal_name",
+                  "field": "player.internal_name",
+                  "type": "string",
+                  "operator": "equal",
+                  "value": "{{full_name}}",
+                  "data": {
+                    "table": "player",
+                    "column": "internal_name",
+                    "type": "text",
+                    "columnObj": {
+                      "type": "string",
+                      "maxLength": 255,
+                      "primary": false,
+                      "nullable": true,
+                      "name": "internal_name"
+                    }
+                  },
+                  "operation": "=",
+                  "table": "player"
+                }
+              ],
+              "conditional": null,
+              "valid": true
+            },
+            "query": "SELECT player_id\nFROM player\nWHERE internal_name = :P1 /* {{full_name}} */"
+          }
+        },
+        "output": false,
+        "meta": [
+          {
+            "type": "number",
+            "name": "player_id"
+          }
+        ],
+        "outputType": "object"
+      },
+      {
+        "name": "",
+        "module": "core",
+        "action": "condition",
+        "options": {
+          "if": "{{check_if_player_exists}}",
+          "then": {
+            "steps": {
+              "name": "",
+              "module": "core",
+              "action": "response",
+              "options": {
+                "status": 400,
+                "data": "Player name not available."
+              }
+            }
+          }
+        },
+        "outputType": "boolean"
+      },
+      {
+        "name": "insert",
+        "module": "dbupdater",
+        "action": "insert",
+        "options": {
+          "connection": "tentemples",
+          "sql": {
+            "type": "insert",
+            "values": [
+              {
+                "table": "player",
+                "column": "internal_name",
+                "type": "text",
+                "value": "{{full_name}}"
+              },
+              {
+                "table": "player",
+                "column": "name",
+                "type": "text",
+                "value": "{{$_POST.name}}"
+              },
+              {
+                "table": "player",
+                "column": "email",
+                "type": "text",
+                "value": "{{$_POST.email}}"
+              },
+              {
+                "table": "player",
+                "column": "tenant_id",
+                "type": "number",
+                "value": "{{$_POST.tenant_id}}"
+              }
+            ],
+            "table": "player",
+            "returning": "player_id",
+            "query": "INSERT INTO player\n(internal_name, name, email, tenant_id) VALUES (:P1 /* {{full_name}} */, :P2 /* {{$_POST.name}} */, :P3 /* {{$_POST.email}} */, :P4 /* {{$_POST.tenant_id}} */)",
+            "params": [
+              {
+                "name": ":P1",
+                "type": "expression",
+                "value": "{{full_name}}",
+                "test": ""
+              },
+              {
+                "name": ":P2",
+                "type": "expression",
+                "value": "{{$_POST.name}}",
+                "test": ""
+              },
+              {
+                "name": ":P3",
+                "type": "expression",
+                "value": "{{$_POST.email}}",
+                "test": ""
+              },
+              {
+                "name": ":P4",
+                "type": "expression",
+                "value": "{{$_POST.tenant_id}}",
+                "test": ""
+              }
+            ]
+          }
+        },
+        "meta": [
+          {
+            "name": "identity",
+            "type": "text"
+          },
+          {
+            "name": "affected",
+            "type": "number"
+          }
+        ],
+        "output": false
+      },
+      {
+        "name": "player",
+        "module": "core",
+        "action": "group",
+        "options": {
+          "exec": {
+            "steps": {
+              "name": "player",
+              "module": "dbconnector",
+              "action": "single",
+              "options": {
+                "connection": "tentemples",
+                "sql": {
+                  "type": "SELECT",
+                  "columns": [
+                    {
+                      "table": "player",
+                      "column": "*"
+                    }
+                  ],
+                  "params": [
+                    {
+                      "operator": "equal",
+                      "type": "expression",
+                      "name": ":P1",
+                      "value": "{{insert.identity}}",
+                      "test": ""
+                    }
+                  ],
+                  "table": {
+                    "name": "player"
+                  },
+                  "primary": "player_id",
+                  "joins": [],
+                  "wheres": {
+                    "condition": "AND",
+                    "rules": [
+                      {
+                        "id": "player.player_id",
+                        "field": "player.player_id",
+                        "type": "double",
+                        "operator": "equal",
+                        "value": "{{insert.identity}}",
+                        "data": {
+                          "table": "player",
+                          "column": "player_id",
+                          "type": "number",
+                          "columnObj": {
+                            "type": "increments",
+                            "primary": true,
+                            "nullable": false,
+                            "name": "player_id"
+                          }
+                        },
+                        "operation": "="
+                      }
+                    ],
+                    "conditional": null,
+                    "valid": true
+                  },
+                  "query": "SELECT *\nFROM player\nWHERE player_id = :P1 /* {{insert.identity}} */"
+                }
+              },
+              "output": true,
+              "meta": [
+                {
+                  "type": "number",
+                  "name": "player_id"
+                },
+                {
+                  "type": "text",
+                  "name": "internal_name"
+                },
+                {
+                  "type": "text",
+                  "name": "name"
+                },
+                {
+                  "type": "text",
+                  "name": "email"
+                },
+                {
+                  "type": "number",
+                  "name": "tenant_id"
+                },
+                {
+                  "type": "number",
+                  "name": "score"
+                },
+                {
+                  "type": "number",
+                  "name": "dan"
+                }
+              ],
+              "outputType": "object"
+            }
+          }
+        },
+        "output": true
+      },
+      {
+        "name": "",
+        "module": "core",
+        "action": "response",
+        "options": {
+          "status": 201,
+          "data": "{{player}}"
+        }
+      }
+    ]
+  }
+}

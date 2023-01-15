@@ -1,0 +1,161 @@
+{
+  "meta": {
+    "$_POST": [
+      {
+        "type": "text",
+        "name": "email"
+      },
+      {
+        "type": "text",
+        "name": "username"
+      },
+      {
+        "type": "text",
+        "name": "password"
+      }
+    ]
+  },
+  "exec": {
+    "steps": [
+      {
+        "name": "validate",
+        "module": "validator",
+        "action": "validate",
+        "options": {
+          "data": [
+            {
+              "name": "email",
+              "value": "{{$_POST.email}}",
+              "rules": {
+                "core:required": {},
+                "core:email": {},
+                "db:notexists": {
+                  "param": {
+                    "connection": "tentemples",
+                    "table": "user",
+                    "column": "email"
+                  },
+                  "message": "Email already registered"
+                }
+              }
+            },
+            {
+              "name": "username",
+              "value": "{{$_POST.username}}",
+              "rules": {
+                "core:required": {},
+                "core:letterswithbasicpunc": {}
+              }
+            },
+            {
+              "name": "password",
+              "value": "{{$_POST.password}}",
+              "rules": {
+                "core:required": {},
+                "core:minlength": {
+                  "param": 8
+                }
+              }
+            }
+          ]
+        }
+      },
+      {
+        "name": "hashed_password",
+        "module": "crypto",
+        "action": "passwordHash",
+        "options": {
+          "password": "{{$_POST.password}}",
+          "algo": "argon2id"
+        },
+        "outputType": "text"
+      },
+      {
+        "name": "insert",
+        "module": "dbupdater",
+        "action": "insert",
+        "options": {
+          "connection": "tentemples",
+          "sql": {
+            "type": "insert",
+            "values": [
+              {
+                "table": "user",
+                "column": "username",
+                "type": "text",
+                "value": "{{$_POST.username}}"
+              },
+              {
+                "table": "user",
+                "column": "email",
+                "type": "text",
+                "value": "{{$_POST.email}}"
+              },
+              {
+                "table": "user",
+                "column": "password",
+                "type": "text",
+                "value": "{{hashed_password}}"
+              }
+            ],
+            "table": "user",
+            "returning": "user_id",
+            "query": "INSERT INTO user\n(username, email, password) VALUES (:P1 /* {{$_POST.username}} */, :P2 /* {{$_POST.email}} */, :P3 /* {{hashed_password}} */)",
+            "params": [
+              {
+                "name": ":P1",
+                "type": "expression",
+                "value": "{{$_POST.username}}",
+                "test": ""
+              },
+              {
+                "name": ":P2",
+                "type": "expression",
+                "value": "{{$_POST.email}}",
+                "test": ""
+              },
+              {
+                "name": ":P3",
+                "type": "expression",
+                "value": "{{hashed_password}}",
+                "test": ""
+              }
+            ]
+          }
+        },
+        "meta": [
+          {
+            "name": "identity",
+            "type": "text"
+          },
+          {
+            "name": "affected",
+            "type": "number"
+          }
+        ]
+      },
+      {
+        "name": "identity",
+        "module": "auth",
+        "action": "login",
+        "options": {
+          "provider": "backend_security"
+        },
+        "output": true,
+        "meta": []
+      },
+      {
+        "name": "",
+        "module": "core",
+        "action": "response",
+        "options": {
+          "data": "User created",
+          "status": 201
+        }
+      }
+    ]
+  },
+  "usedModules": {
+    "argon2": "^0.30.2"
+  }
+}

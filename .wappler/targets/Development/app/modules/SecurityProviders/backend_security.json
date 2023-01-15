@@ -1,0 +1,35 @@
+{
+  "name": "backend_security",
+  "module": "auth",
+  "action": "provider",
+  "options": {
+    "secret": "IZ3uOSgepoSZYVp",
+    "provider": "Database",
+    "connection": "tentemples",
+    "passwordVerify": true,
+    "users": {
+      "table": "user",
+      "identity": "user_id",
+      "username": "username",
+      "password": "password"
+    },
+    "permissions": {
+      "user": {
+        "table": "user",
+        "identity": "user_id",
+        "conditions": []
+      },
+      "admin": {
+        "table": "user",
+        "identity": "user_id",
+        "conditions": []
+      }
+    }
+  },
+  "meta": [
+    {
+      "name": "identity",
+      "type": "text"
+    }
+  ]
+}

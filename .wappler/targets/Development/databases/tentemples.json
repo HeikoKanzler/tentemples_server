@@ -51,133 +51,6 @@
           }
         }
       },
-      "tournament_stages": {
-        "db": {
-          "engine": "InnoDB",
-          "schema": "tentemples",
-          "collation": "utf8_general_ci",
-          "system_versioned": false
-        },
-        "columns": {
-          "stage_id": {
-            "db": {
-              "type": "increments",
-              "primary": true,
-              "nullable": false
-            }
-          },
-          "tournament_id": {
-            "db": {
-              "type": "reference",
-              "primary": false,
-              "nullable": true,
-              "references": "tournament_id",
-              "inTable": "tournaments",
-              "referenceType": "integer",
-              "onUpdate": "CASCADE",
-              "onDelete": "CASCADE"
-            }
-          },
-          "title": {
-            "db": {
-              "type": "string",
-              "maxLength": 255,
-              "primary": false,
-              "nullable": true
-            }
-          },
-          "description": {
-            "db": {
-              "type": "string",
-              "maxLength": 255,
-              "primary": false,
-              "nullable": true
-            }
-          },
-          "background_image": {
-            "db": {
-              "type": "string",
-              "maxLength": 255,
-              "primary": false,
-              "nullable": true
-            }
-          },
-          "difficulty": {
-            "db": {
-              "type": "string",
-              "maxLength": 255,
-              "primary": false,
-              "nullable": true
-            }
-          }
-        },
-        "parent": "tournaments"
-      },
-      "player": {
-        "db": {
-          "engine": "InnoDB",
-          "schema": "tentemples",
-          "collation": "utf8_general_ci",
-          "system_versioned": false
-        },
-        "columns": {
-          "player_id": {
-            "db": {
-              "type": "increments",
-              "primary": true,
-              "nullable": false
-            }
-          },
-          "internal_name": {
-            "db": {
-              "type": "string",
-              "maxLength": 255,
-              "primary": false,
-              "nullable": true
-            }
-          },
-          "name": {
-            "db": {
-              "type": "string",
-              "maxLength": 255,
-              "primary": false,
-              "nullable": true
-            }
-          },
-          "email": {
-            "db": {
-              "type": "string",
-              "maxLength": 255,
-              "primary": false,
-              "nullable": true
-            }
-          },
-          "tenant_id": {
-            "db": {
-              "type": "integer",
-              "primary": false,
-              "nullable": true,
-              "default": "'1'"
-            }
-          },
-          "score": {
-            "db": {
-              "type": "integer",
-              "default": "'0'",
-              "primary": false,
-              "nullable": true
-            }
-          },
-          "dan": {
-            "db": {
-              "type": "integer",
-              "default": "'0'",
-              "primary": false,
-              "nullable": true
-            }
-          }
-        }
-      },
       "tournaments": {
         "db": {
           "engine": "InnoDB",
@@ -245,6 +118,68 @@
           "tournament_stages": "tournament_id",
           "tournament_challenges": "tournament_id"
         }
+      },
+      "tournament_stages": {
+        "db": {
+          "engine": "InnoDB",
+          "schema": "tentemples",
+          "collation": "utf8_general_ci",
+          "system_versioned": false
+        },
+        "columns": {
+          "stage_id": {
+            "db": {
+              "type": "increments",
+              "primary": true,
+              "nullable": false
+            }
+          },
+          "tournament_id": {
+            "db": {
+              "type": "reference",
+              "primary": false,
+              "nullable": true,
+              "references": "tournament_id",
+              "inTable": "tournaments",
+              "referenceType": "integer",
+              "onUpdate": "CASCADE",
+              "onDelete": "CASCADE"
+            }
+          },
+          "title": {
+            "db": {
+              "type": "string",
+              "maxLength": 255,
+              "primary": false,
+              "nullable": true
+            }
+          },
+          "description": {
+            "db": {
+              "type": "string",
+              "maxLength": 255,
+              "primary": false,
+              "nullable": true
+            }
+          },
+          "background_image": {
+            "db": {
+              "type": "string",
+              "maxLength": 255,
+              "primary": false,
+              "nullable": true
+            }
+          },
+          "difficulty": {
+            "db": {
+              "type": "string",
+              "maxLength": 255,
+              "primary": false,
+              "nullable": true
+            }
+          }
+        },
+        "parent": "tournaments"
       },
       "tournament_challenges": {
         "db": {
@@ -473,6 +408,120 @@
           }
         },
         "parent": "tournament_challenges"
+      },
+      "user": {
+        "db": {
+          "engine": "InnoDB",
+          "schema": "tentemples",
+          "collation": "utf8_general_ci",
+          "system_versioned": false
+        },
+        "columns": {
+          "user_id": {
+            "db": {
+              "type": "increments",
+              "primary": true,
+              "nullable": false
+            }
+          },
+          "username": {
+            "db": {
+              "type": "string",
+              "maxLength": 255,
+              "primary": false,
+              "nullable": true
+            }
+          },
+          "email": {
+            "db": {
+              "type": "string",
+              "maxLength": 255,
+              "primary": false,
+              "nullable": true
+            }
+          },
+          "password": {
+            "db": {
+              "type": "string",
+              "maxLength": 255,
+              "primary": false,
+              "nullable": true
+            }
+          }
+        }
+      },
+      "player": {
+        "db": {
+          "engine": "InnoDB",
+          "schema": "tentemples",
+          "collation": "utf8_general_ci",
+          "system_versioned": false
+        },
+        "columns": {
+          "player_id": {
+            "db": {
+              "type": "increments",
+              "primary": true,
+              "nullable": false
+            }
+          },
+          "internal_name": {
+            "db": {
+              "type": "string",
+              "maxLength": 255,
+              "primary": false,
+              "nullable": true
+            }
+          },
+          "name": {
+            "db": {
+              "type": "string",
+              "maxLength": 255,
+              "primary": false,
+              "nullable": true
+            }
+          },
+          "email": {
+            "db": {
+              "type": "string",
+              "maxLength": 255,
+              "primary": false,
+              "nullable": true
+            }
+          },
+          "tenant_id": {
+            "db": {
+              "type": "integer",
+              "primary": false,
+              "nullable": true,
+              "default": "'1'"
+            }
+          },
+          "score": {
+            "db": {
+              "type": "integer",
+              "default": "'0'",
+              "primary": false,
+              "nullable": true
+            }
+          },
+          "dan": {
+            "db": {
+              "type": "integer",
+              "default": "'0'",
+              "primary": false,
+              "nullable": true
+            }
+          },
+          "color": {
+            "db": {
+              "type": "integer",
+              "default": "'0'",
+              "primary": false,
+              "nullable": true
+            }
+          }
+        }
       }
     },
     "views": {},

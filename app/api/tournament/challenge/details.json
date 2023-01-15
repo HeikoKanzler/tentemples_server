@@ -4,210 +4,496 @@
       {
         "type": "text",
         "name": "id"
-      },
-      {
-        "type": "text",
-        "name": "sort"
-      },
-      {
-        "type": "text",
-        "name": "dir"
       }
     ]
   },
   "exec": {
-    "steps": {
-      "name": "challenge",
-      "module": "dbconnector",
-      "action": "select",
-      "options": {
-        "connection": "tentemples",
-        "sql": {
-          "type": "SELECT",
-          "columns": [
-            {
-              "table": "tournament_challenges",
-              "column": "*"
-            }
-          ],
-          "params": [
-            {
-              "operator": "equal",
-              "type": "expression",
-              "name": ":P1",
-              "value": "{{$_GET.id}}",
-              "test": ""
-            }
-          ],
-          "table": {
-            "name": "tournament_challenges"
-          },
-          "primary": "challenge_id",
-          "joins": [],
-          "wheres": {
-            "condition": "AND",
-            "rules": [
+    "steps": [
+      {
+        "name": "challenge",
+        "module": "dbconnector",
+        "action": "single",
+        "options": {
+          "connection": "tentemples",
+          "sql": {
+            "type": "SELECT",
+            "columns": [
               {
-                "id": "tournament_challenges.challenge_id",
-                "field": "tournament_challenges.challenge_id",
-                "type": "double",
-                "operator": "equal",
-                "value": "{{$_GET.id}}",
-                "data": {
-                  "table": "tournament_challenges",
-                  "column": "challenge_id",
-                  "type": "number",
-                  "columnObj": {
-                    "type": "increments",
-                    "primary": true,
-                    "nullable": false,
-                    "name": "challenge_id"
-                  }
-                },
-                "operation": "="
+                "table": "tournament_challenges",
+                "column": "*"
               }
             ],
-            "conditional": null,
-            "valid": true
+            "params": [
+              {
+                "operator": "equal",
+                "type": "expression",
+                "name": ":P1",
+                "value": "{{$_GET.id}}",
+                "test": ""
+              }
+            ],
+            "table": {
+              "name": "tournament_challenges"
+            },
+            "primary": "challenge_id",
+            "joins": [],
+            "wheres": {
+              "condition": "AND",
+              "rules": [
+                {
+                  "id": "tournament_challenges.challenge_id",
+                  "field": "tournament_challenges.challenge_id",
+                  "type": "double",
+                  "operator": "equal",
+                  "value": "{{$_GET.id}}",
+                  "data": {
+                    "table": "tournament_challenges",
+                    "column": "challenge_id",
+                    "type": "number",
+                    "columnObj": {
+                      "type": "increments",
+                      "primary": true,
+                      "nullable": false,
+                      "name": "challenge_id"
+                    }
+                  },
+                  "operation": "="
+                }
+              ],
+              "conditional": null,
+              "valid": true
+            },
+            "query": "SELECT *\nFROM tournament_challenges\nWHERE challenge_id = :P1 /* {{$_GET.id}} */"
+          }
+        },
+        "output": false,
+        "meta": [
+          {
+            "type": "number",
+            "name": "challenge_id"
           },
-          "query": "SELECT *\nFROM tournament_challenges\nWHERE challenge_id = :P1 /* {{$_GET.id}} */\nORDER BY challenge_id ASC",
-          "orders": [
-            {
-              "table": "rounds",
-              "column": "challenge_id",
-              "direction": "ASC",
-              "recid": 1
-            }
-          ],
-          "sub": {
-            "rounds": {
-              "table": {
-                "name": "tournament_challenge_rounds",
-                "alias": "rounds"
+          {
+            "type": "number",
+            "name": "tournament_id"
+          },
+          {
+            "type": "datetime",
+            "name": "created"
+          },
+          {
+            "type": "number",
+            "name": "player_1"
+          },
+          {
+            "type": "number",
+            "name": "player_2"
+          },
+          {
+            "type": "number",
+            "name": "winner"
+          },
+          {
+            "type": "datetime",
+            "name": "finished"
+          },
+          {
+            "type": "number",
+            "name": "stage_id"
+          }
+        ],
+        "outputType": "object"
+      },
+      {
+        "name": "",
+        "module": "core",
+        "action": "condition",
+        "options": {
+          "if": "{{challenge}}",
+          "then": {
+            "steps": [
+              {
+                "name": "challenge",
+                "module": "core",
+                "action": "setvalue",
+                "options": {
+                  "value": "{{challenge}}"
+                },
+                "meta": [
+                  {
+                    "name": "challenge_id",
+                    "type": "number"
+                  },
+                  {
+                    "name": "tournament_id",
+                    "type": "number"
+                  },
+                  {
+                    "name": "created",
+                    "type": "datetime"
+                  },
+                  {
+                    "name": "player_1",
+                    "type": "number"
+                  },
+                  {
+                    "name": "player_2",
+                    "type": "number"
+                  },
+                  {
+                    "name": "winner",
+                    "type": "number"
+                  },
+                  {
+                    "name": "finished",
+                    "type": "datetime"
+                  },
+                  {
+                    "name": "stage_id",
+                    "type": "number"
+                  }
+                ],
+                "outputType": "text",
+                "output": true
               },
-              "key": "challenge_id"
+              {
+                "name": "player_1",
+                "module": "dbconnector",
+                "action": "single",
+                "options": {
+                  "connection": "tentemples",
+                  "sql": {
+                    "type": "SELECT",
+                    "columns": [
+                      {
+                        "table": "player",
+                        "column": "*"
+                      }
+                    ],
+                    "params": [
+                      {
+                        "operator": "equal",
+                        "type": "expression",
+                        "name": ":P1",
+                        "value": "{{challenge.player_1}}",
+                        "test": ""
+                      }
+                    ],
+                    "table": {
+                      "name": "player"
+                    },
+                    "primary": "player_id",
+                    "joins": [],
+                    "wheres": {
+                      "condition": "AND",
+                      "rules": [
+                        {
+                          "id": "player.player_id",
+                          "field": "player.player_id",
+                          "type": "double",
+                          "operator": "equal",
+                          "value": "{{challenge.player_1}}",
+                          "data": {
+                            "table": "player",
+                            "column": "player_id",
+                            "type": "number",
+                            "columnObj": {
+                              "type": "increments",
+                              "primary": true,
+                              "nullable": false,
+                              "name": "player_id"
+                            }
+                          },
+                          "operation": "="
+                        }
+                      ],
+                      "conditional": null,
+                      "valid": true
+                    },
+                    "query": "SELECT *\nFROM player\nWHERE player_id = :P1 /* {{challenge.player_1}} */"
+                  }
+                },
+                "output": true,
+                "meta": [
+                  {
+                    "type": "number",
+                    "name": "player_id"
+                  },
+                  {
+                    "type": "text",
+                    "name": "internal_name"
+                  },
+                  {
+                    "type": "text",
+                    "name": "name"
+                  },
+                  {
+                    "type": "text",
+                    "name": "email"
+                  },
+                  {
+                    "type": "number",
+                    "name": "tenant_id"
+                  },
+                  {
+                    "type": "number",
+                    "name": "score"
+                  },
+                  {
+                    "type": "number",
+                    "name": "dan"
+                  }
+                ],
+                "outputType": "object"
+              },
+              {
+                "name": "player_2",
+                "module": "dbconnector",
+                "action": "single",
+                "options": {
+                  "connection": "tentemples",
+                  "sql": {
+                    "type": "SELECT",
+                    "columns": [
+                      {
+                        "table": "player",
+                        "column": "*"
+                      }
+                    ],
+                    "params": [
+                      {
+                        "operator": "equal",
+                        "type": "expression",
+                        "name": ":P1",
+                        "value": "{{challenge.player_2}}",
+                        "test": ""
+                      }
+                    ],
+                    "table": {
+                      "name": "player"
+                    },
+                    "primary": "player_id",
+                    "joins": [],
+                    "wheres": {
+                      "condition": "AND",
+                      "rules": [
+                        {
+                          "id": "player.player_id",
+                          "field": "player.player_id",
+                          "type": "double",
+                          "operator": "equal",
+                          "value": "{{challenge.player_2}}",
+                          "data": {
+                            "table": "player",
+                            "column": "player_id",
+                            "type": "number",
+                            "columnObj": {
+                              "type": "increments",
+                              "primary": true,
+                              "nullable": false,
+                              "name": "player_id"
+                            }
+                          },
+                          "operation": "="
+                        }
+                      ],
+                      "conditional": null,
+                      "valid": true
+                    },
+                    "query": "SELECT *\nFROM player\nWHERE player_id = :P1 /* {{challenge.player_2}} */"
+                  }
+                },
+                "output": true,
+                "meta": [
+                  {
+                    "type": "number",
+                    "name": "player_id"
+                  },
+                  {
+                    "type": "text",
+                    "name": "internal_name"
+                  },
+                  {
+                    "type": "text",
+                    "name": "name"
+                  },
+                  {
+                    "type": "text",
+                    "name": "email"
+                  },
+                  {
+                    "type": "number",
+                    "name": "tenant_id"
+                  },
+                  {
+                    "type": "number",
+                    "name": "score"
+                  },
+                  {
+                    "type": "number",
+                    "name": "dan"
+                  }
+                ],
+                "outputType": "object"
+              },
+              {
+                "name": "rounds",
+                "module": "dbconnector",
+                "action": "select",
+                "options": {
+                  "connection": "tentemples",
+                  "sql": {
+                    "type": "SELECT",
+                    "columns": [
+                      {
+                        "table": "tournament_challenge_rounds",
+                        "column": "*"
+                      }
+                    ],
+                    "params": [
+                      {
+                        "operator": "equal",
+                        "type": "expression",
+                        "name": ":P1",
+                        "value": "{{$_GET.id}}",
+                        "test": ""
+                      }
+                    ],
+                    "table": {
+                      "name": "tournament_challenge_rounds"
+                    },
+                    "primary": "round_id",
+                    "joins": [],
+                    "wheres": {
+                      "condition": "AND",
+                      "rules": [
+                        {
+                          "id": "tournament_challenge_rounds.challenge_id",
+                          "field": "tournament_challenge_rounds.challenge_id",
+                          "type": "double",
+                          "operator": "equal",
+                          "value": "{{$_GET.id}}",
+                          "data": {
+                            "table": "tournament_challenge_rounds",
+                            "column": "challenge_id",
+                            "type": "number",
+                            "columnObj": {
+                              "type": "reference",
+                              "primary": false,
+                              "nullable": true,
+                              "references": "challenge_id",
+                              "inTable": "tournament_challenges",
+                              "referenceType": "integer",
+                              "onUpdate": "CASCADE",
+                              "onDelete": "CASCADE",
+                              "name": "challenge_id"
+                            }
+                          },
+                          "operation": "="
+                        }
+                      ],
+                      "conditional": null,
+                      "valid": true
+                    },
+                    "query": "SELECT *\nFROM tournament_challenge_rounds\nWHERE challenge_id = :P1 /* {{$_GET.id}} */"
+                  }
+                },
+                "output": true,
+                "meta": [
+                  {
+                    "type": "number",
+                    "name": "round_id"
+                  },
+                  {
+                    "type": "number",
+                    "name": "challenge_id"
+                  },
+                  {
+                    "type": "datetime",
+                    "name": "created"
+                  },
+                  {
+                    "type": "datetime",
+                    "name": "finished"
+                  },
+                  {
+                    "type": "number",
+                    "name": "p1_a1"
+                  },
+                  {
+                    "type": "number",
+                    "name": "p1_a2"
+                  },
+                  {
+                    "type": "number",
+                    "name": "p1_a3"
+                  },
+                  {
+                    "type": "number",
+                    "name": "p1_d1"
+                  },
+                  {
+                    "type": "number",
+                    "name": "p1_d2"
+                  },
+                  {
+                    "type": "number",
+                    "name": "p1_d3"
+                  },
+                  {
+                    "type": "number",
+                    "name": "winner"
+                  },
+                  {
+                    "type": "number",
+                    "name": "p2_a1"
+                  },
+                  {
+                    "type": "number",
+                    "name": "p2_a2"
+                  },
+                  {
+                    "type": "number",
+                    "name": "p2_a3"
+                  },
+                  {
+                    "type": "number",
+                    "name": "p2_d1"
+                  },
+                  {
+                    "type": "number",
+                    "name": "p2_d2"
+                  },
+                  {
+                    "type": "number",
+                    "name": "p2_d3"
+                  },
+                  {
+                    "type": "number",
+                    "name": "p1_hits"
+                  },
+                  {
+                    "type": "number",
+                    "name": "p2_hits"
+                  }
+                ],
+                "outputType": "array"
+              }
+            ]
+          },
+          "else": {
+            "steps": {
+              "name": "not_found",
+              "module": "core",
+              "action": "response",
+              "options": {
+                "status": 404,
+                "data": "Challenge not found"
+              }
             }
           }
-        }
-      },
-      "output": true,
-      "meta": [
-        {
-          "type": "number",
-          "name": "challenge_id"
         },
-        {
-          "type": "number",
-          "name": "tournament_id"
-        },
-        {
-          "type": "datetime",
-          "name": "created"
-        },
-        {
-          "type": "number",
-          "name": "player_1"
-        },
-        {
-          "type": "number",
-          "name": "player_2"
-        },
-        {
-          "type": "number",
-          "name": "winner"
-        },
-        {
-          "type": "datetime",
-          "name": "finished"
-        },
-        {
-          "type": "number",
-          "name": "stage_id"
-        },
-        {
-          "name": "rounds",
-          "type": "array",
-          "sub": [
-            {
-              "type": "number",
-              "name": "round_id"
-            },
-            {
-              "type": "number",
-              "name": "challenge_id"
-            },
-            {
-              "type": "datetime",
-              "name": "created"
-            },
-            {
-              "type": "datetime",
-              "name": "finished"
-            },
-            {
-              "type": "number",
-              "name": "p1_a1"
-            },
-            {
-              "type": "number",
-              "name": "p1_a2"
-            },
-            {
-              "type": "number",
-              "name": "p1_a3"
-            },
-            {
-              "type": "number",
-              "name": "p1_d1"
-            },
-            {
-              "type": "number",
-              "name": "p1_d2"
-            },
-            {
-              "type": "number",
-              "name": "p1_d3"
-            },
-            {
-              "type": "number",
-              "name": "winner"
-            },
-            {
-              "type": "number",
-              "name": "p2_a1"
-            },
-            {
-              "type": "number",
-              "name": "p2_a2"
-            },
-            {
-              "type": "number",
-              "name": "p2_a3"
-            },
-            {
-              "type": "number",
-              "name": "p2_d1"
-            },
-            {
-              "type": "number",
-              "name": "p2_d2"
-            },
-            {
-              "type": "number",
-              "name": "p2_d3"
-            },
-            {
-              "type": "number",
-              "name": "p1_hits"
-            },
-            {
-              "type": "number",
-              "name": "p2_hits"
-            }
-          ]
-        }
-      ],
-      "outputType": "array"
-    }
+        "outputType": "boolean"
+      }
+    ]
   }
 }

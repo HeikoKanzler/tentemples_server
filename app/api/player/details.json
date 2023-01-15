@@ -1,3 +1,120 @@
 {
-  "exec": {}
+  "meta": {
+    "$_GET": [
+      {
+        "type": "text",
+        "name": "player_id"
+      }
+    ]
+  },
+  "exec": {
+    "steps": {
+      "name": "",
+      "module": "core",
+      "action": "group",
+      "options": {
+        "exec": {
+          "steps": {
+            "name": "player",
+            "module": "dbconnector",
+            "action": "single",
+            "options": {
+              "connection": "tentemples",
+              "sql": {
+                "type": "SELECT",
+                "columns": [
+                  {
+                    "table": "player",
+                    "column": "player_id"
+                  },
+                  {
+                    "table": "player",
+                    "column": "name"
+                  },
+                  {
+                    "table": "player",
+                    "column": "color"
+                  },
+                  {
+                    "table": "player",
+                    "column": "dan"
+                  },
+                  {
+                    "table": "player",
+                    "column": "score"
+                  }
+                ],
+                "params": [
+                  {
+                    "operator": "equal",
+                    "type": "expression",
+                    "name": ":P1",
+                    "value": "{{$_GET.player_id}}",
+                    "test": ""
+                  }
+                ],
+                "table": {
+                  "name": "player"
+                },
+                "primary": "player_id",
+                "joins": [],
+                "wheres": {
+                  "condition": "AND",
+                  "rules": [
+                    {
+                      "id": "player.player_id",
+                      "field": "player.player_id",
+                      "type": "double",
+                      "operator": "equal",
+                      "value": "{{$_GET.player_id}}",
+                      "data": {
+                        "table": "player",
+                        "column": "player_id",
+                        "type": "number",
+                        "columnObj": {
+                          "type": "increments",
+                          "primary": true,
+                          "nullable": false,
+                          "name": "player_id"
+                        }
+                      },
+                      "operation": "="
+                    }
+                  ],
+                  "conditional": null,
+                  "valid": true
+                },
+                "query": "SELECT player_id, name, color, dan, score\nFROM player\nWHERE player_id = :P1 /* {{$_GET.player_id}} */"
+              }
+            },
+            "output": true,
+            "meta": [
+              {
+                "type": "number",
+                "name": "player_id"
+              },
+              {
+                "type": "text",
+                "name": "name"
+              },
+              {
+                "type": "number",
+                "name": "color"
+              },
+              {
+                "type": "number",
+                "name": "dan"
+              },
+              {
+                "type": "number",
+                "name": "score"
+              }
+            ],
+            "outputType": "object"
+          }
+        }
+      },
+      "output": true
+    }
+  }
 }
