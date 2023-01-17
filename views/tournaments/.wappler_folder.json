@@ -1,0 +1,14 @@
+{
+  "list.ejs": {
+    "layoutPage": "main",
+    "description": "List all tournaments"
+  },
+  "edit.ejs": {
+    "layoutPage": "main",
+    "description": "Create or edit new tournaments"
+  },
+  "create.ejs": {
+    "layoutPage": "main",
+    "description": "Create tournament"
+  }
+}

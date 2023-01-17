@@ -1,0 +1,6 @@
+{
+  "list.ejs": {
+    "layoutPage": "main",
+    "description": "List all players"
+  }
+}

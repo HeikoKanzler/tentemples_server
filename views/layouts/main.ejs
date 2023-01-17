@@ -5,16 +5,67 @@
   <base href="/">
   <script src="/dmxAppConnect/dmxAppConnect.js"></script>
   <meta charset="UTF-8">
-  <title>Untitled Document</title>
+  <title>Ten Temples Administration</title>
 
   <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.14.0/css/all.css" integrity="sha384-HzLeBuhoNPvSl5KYnjx0BT+WB0QEEqLprO+NBkkk5gbc67FTaL7XIGa2w1L0Xbgc" crossorigin="anonymous" />
   <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
   <link rel="stylesheet" href="/bootstrap/5/css/bootstrap.min.css" />
   <link rel="stylesheet" href="/css/style.css" />
   <script src="/dmxAppConnect/dmxRouting/dmxRouting.js" defer></script>
+  <script src="/dmxAppConnect/dmxBootstrap5Navigation/dmxBootstrap5Navigation.js" defer></script>
+  <link rel="stylesheet" href="/dmxAppConnect/dmxBootstrap5TableGenerator/dmxBootstrap5TableGenerator.css" />
+  <script src="/dmxAppConnect/dmxBootstrap5Modal/dmxBootstrap5Modal.js" defer></script>
+  <script src="/dmxAppConnect/dmxBrowser/dmxBrowser.js" defer></script>
+  <script src="/dmxAppConnect/dmxFormatter/dmxFormatter.js" defer></script>
+  <link rel="stylesheet" href="/dmxAppConnect/dmxNotifications/dmxNotifications.css" />
+  <script src="/dmxAppConnect/dmxNotifications/dmxNotifications.js" defer></script>
+  <link rel="stylesheet" href="/dmxAppConnect/dmxValidator/dmxValidator.css" />
+  <script src="/dmxAppConnect/dmxValidator/dmxValidator.js" defer></script>
 </head>
 
 <body is="dmx-app" id="main">
+  <div is="dmx-browser" id="global_browser"></div>
+  <dmx-notifications id="global_notifications" offset-y="20">
+
+  </dmx-notifications>
+  <header class="text-light bg-warning">
+    <nav class="navbar navbar-expand-lg bg-warning text-light navbar-dark mb-2">
+
+      <div class="container">
+        <a class="navbar-brand text-light fw-bolder" href="/">
+          <img src="/assets/statics/TenTemplesLogoSmall.png" />
+        </a>
+        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar1_collapse" aria-controls="navbar1_collapse" aria-expanded="false" aria-label="Toggle navigation">
+          <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="navbar1_collapse">
+          <div class="navbar-nav">
+            <div class="nav-item dropdown"><a class="nav-link dropdown-toggle" data-bs-toggle="dropdown" href="#" id="dropdown2" role="button" aria-haspopup="true" aria-expanded="false">Tenants</a>
+              <div class="dropdown-menu" aria-labelledby="dropdown2">
+                <a class="dropdown-item" href="/tenants/list" internal>List Tenants</a>
+                <a class="dropdown-item" href="/tenants/edit" internal>New Tenant</a>
+              </div>
+            </div>
+            <div class="nav-item dropdown"><a class="nav-link dropdown-toggle" data-bs-toggle="dropdown" href="#" id="dropdown1" role="button" aria-haspopup="true" aria-expanded="false">Tournaments</a>
+              <div class="dropdown-menu" aria-labelledby="dropdown1">
+                <a class="dropdown-item" href="/tournaments/list" internal>List Tournaments</a>
+                <a class="dropdown-item" internal href="/tournaments/create/">New Tournament</a>
+                <a class="dropdown-item" href="/tournaments/stages/list" internal>List Stages</a>
+              </div>
+            </div>
+            <div class="nav-item dropdown"><a class="nav-link dropdown-toggle" data-bs-toggle="dropdown" href="#" id="dropdown3" role="button" aria-haspopup="true" aria-expanded="false">Player</a>
+              <div class="dropdown-menu" aria-labelledby="dropdown3">
+                <a class="dropdown-item" href="/player/list" internal>List Players</a>
+                <a class="dropdown-item" href="#" internal>New Player</a>
+              </div>
+            </div>
+
+
+          </div>
+        </div>
+      </div>
+    </nav>
+  </header>
   <div is="dmx-view" id="content">
     <%- await include(content, locals); %>
   </div>

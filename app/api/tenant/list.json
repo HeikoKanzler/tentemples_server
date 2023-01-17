@@ -12,49 +12,66 @@
     ]
   },
   "exec": {
-    "steps": {
-      "name": "tenants",
-      "module": "dbconnector",
-      "action": "select",
-      "options": {
-        "connection": "tentemples",
-        "sql": {
-          "type": "SELECT",
-          "columns": [
-            {
-              "table": "tenant",
-              "column": "*"
-            }
+    "steps": [
+      {
+        "name": "",
+        "module": "auth",
+        "action": "restrict",
+        "options": {
+          "provider": "backend_security",
+          "loginUrl": "/login",
+          "permissions": [
+            "admin",
+            "user"
           ],
-          "params": [],
-          "table": {
-            "name": "tenant"
-          },
-          "primary": "tenant_id",
-          "joins": [],
-          "query": "SELECT *\nFROM tenant"
-        }
+          "forbiddenUrl": "/login"
+        },
+        "disabled": true
       },
-      "output": true,
-      "meta": [
-        {
-          "type": "number",
-          "name": "tenant_id"
+      {
+        "name": "tenants",
+        "module": "dbconnector",
+        "action": "select",
+        "options": {
+          "connection": "tentemples",
+          "sql": {
+            "type": "SELECT",
+            "columns": [
+              {
+                "table": "tenant",
+                "column": "*"
+              }
+            ],
+            "params": [],
+            "table": {
+              "name": "tenant"
+            },
+            "primary": "tenant_id",
+            "joins": [],
+            "query": "SELECT *\nFROM tenant"
+          }
         },
-        {
-          "type": "text",
-          "name": "name"
-        },
-        {
-          "type": "text",
-          "name": "title"
-        },
-        {
-          "type": "text",
-          "name": "description"
-        }
-      ],
-      "outputType": "array"
-    }
+        "output": true,
+        "meta": [
+          {
+            "type": "number",
+            "name": "tenant_id"
+          },
+          {
+            "type": "text",
+            "name": "name"
+          },
+          {
+            "type": "text",
+            "name": "title"
+          },
+          {
+            "type": "text",
+            "name": "description"
+          }
+        ],
+        "outputType": "array"
+      }
+    ]
   }
 }

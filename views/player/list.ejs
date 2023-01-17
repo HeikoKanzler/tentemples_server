@@ -1,0 +1,104 @@
+<!-- Wappler include head-page="layouts/main" fontawesome_5="cdn" bootstrap5="local" is="dmx-app" id="list" appConnect="local" components="{dmxBootstrap5TableGenerator:{},dmxBootstrap5Modal:{}}" -->
+
+<meta name="ac:route" content="/player/list">
+<dmx-serverconnect id="get_players" url="/api/player/list"></dmx-serverconnect>
+<dmx-serverconnect id="get_player_details" noload url="/api/player/details" dmx-param:player_id=""></dmx-serverconnect>
+<div class="modal" id="modal_player_details" is="dmx-bs5-modal" tabindex="-1" dmx-on:hide-bs-modal="form_player_update.reset();modal_player_details.hide()">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title">Player</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body">
+        <form is="dmx-serverconnect-form" id="form_player_update" method="post" action="/api/player/update" dmx-generator="bootstrap5" dmx-form-type="horizontal" dmx-populate="get_player_details.data.player" dmx-on:success="form_player_update.reset();modal_player_details.hide();get_players.load({})">
+          <div class="form-group mb-3 row">
+            <label for="inp_player_id" class="col-sm-2 col-form-label">Player</label>
+            <div class="col-sm-10">
+              <input type="number" class="form-control" id="inp_player_id" name="player_id" dmx-bind:value="get_player_details.data.player.player_id" aria-describedby="inp_player_id_help" placeholder="Enter Player" readonly="true">
+            </div>
+          </div>
+          <div class="form-group mb-3 row">
+            <label for="inp_internal_name" class="col-sm-2 col-form-label">Internal</label>
+            <div class="col-sm-10">
+              <input type="text" class="form-control" id="inp_internal_name" name="internal_name" dmx-bind:value="get_player_details.data.player.internal_name" aria-describedby="inp_internal_name_help" placeholder="Enter Internal name">
+            </div>
+          </div>
+          <div class="form-group mb-3 row">
+            <label for="inp_name" class="col-sm-2 col-form-label">Name</label>
+            <div class="col-sm-10">
+              <input type="text" class="form-control" id="inp_name" name="name" dmx-bind:value="get_player_details.data.player.name" aria-describedby="inp_name_help" placeholder="Enter Name">
+            </div>
+          </div>
+          <div class="form-group mb-3 row">
+            <label for="inp_email" class="col-sm-2 col-form-label">Email</label>
+            <div class="col-sm-10">
+              <input type="text" class="form-control" id="inp_email" name="email" dmx-bind:value="get_player_details.data.player.email" aria-describedby="inp_email_help" placeholder="Enter Email">
+            </div>
+          </div>
+          <div class="form-group mb-3 row">
+            <label for="inp_color" class="col-sm-2 col-form-label">Color</label>
+            <div class="col-sm-10">
+              <input type="number" class="form-control" id="inp_color" name="color" dmx-bind:value="get_player_details.data.player.color" aria-describedby="inp_color_help" placeholder="Enter Color">
+            </div>
+          </div>
+          <div class="form-group mb-3 row">
+            <label for="inp_dan" class="col-sm-2 col-form-label">Dan</label>
+            <div class="col-sm-10">
+              <input type="number" class="form-control" id="inp_dan" name="dan" dmx-bind:value="get_player_details.data.player.dan" aria-describedby="inp_dan_help" placeholder="Enter Dan">
+            </div>
+          </div>
+          <div class="form-group mb-3 row">
+            <label for="inp_score" class="col-sm-2 col-form-label">Score</label>
+            <div class="col-sm-10">
+              <input type="number" class="form-control" id="inp_score" name="score" dmx-bind:value="get_player_details.data.player.score" aria-describedby="inp_score_help" placeholder="Enter Score">
+            </div>
+          </div>
+        </form>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-warning text-uppercase" id="btn_update" dmx-on:click="form_player_update.submit()" dmx-bind:disabled="form_player_update.state.executing">
+          <span class="spinner-border spinner-border-sm" role="status" dmx-show="form_player_update.state.executing"></span>Save changes</button>
+      </div>
+    </div>
+  </div>
+</div>
+<div class="container" id="main_player_data">
+  <%- await include('/partials/page_heading', Object.assign({}, locals, {Heading:'Player',heading:'Player'})) %>
+  <div class="row" id="table_player_data">
+    <div class="table-responsive">
+      <table class="table table-striped table-bordered table-hover">
+        <thead>
+          <tr>
+
+            <th>ID</th>
+            <th>Internal name</th>
+            <th>Name</th>
+            <th>Email</th>
+            <th>Tenant</th>
+            <th>Score</th>
+            <th>Dan</th>
+            <th>
+              Color</th>
+            <th scope="row" class="text-warning">Actions</th>
+          </tr>
+        </thead>
+        <tbody is="dmx-repeat" dmx-generator="bs5table" dmx-bind:repeat="get_players.data.query" id="tableRepeat2">
+          <tr>
+            <td dmx-text="player_id"></td>
+            <td dmx-text="internal_name"></td>
+            <td dmx-text="name"></td>
+            <td dmx-text="email"></td>
+            <td dmx-text="tenant_id"></td>
+            <td dmx-text="score"></td>
+            <td dmx-text="dan"></td>
+            <td dmx-text="color"></td>
+            <td>
+              <button id="btn_edit_player" class="btn btn-warning btn-sm text-white" dmx-on:click="modal_player_details.show();get_player_details.load({player_id: player_id})"><i class="fas fa-pencil-alt"></i></button>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+</div>

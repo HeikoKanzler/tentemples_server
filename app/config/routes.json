@@ -5,6 +5,69 @@
       "page": "index",
       "routeType": "page",
       "layout": "main"
+    },
+    {
+      "path": "/login",
+      "page": "login",
+      "layout": "main"
+    },
+    {
+      "path": "/tenants/list",
+      "page": "tenants/list",
+      "layout": "main"
+    },
+    {
+      "path": "/tournaments/list/",
+      "page": "tournaments/list",
+      "layout": "main"
+    },
+    {
+      "path": "/player/list",
+      "page": "player/list",
+      "layout": "main"
+    },
+    {
+      "path": "/tournaments/challenges/list/:tournament_id",
+      "page": "tournaments/challenges/list",
+      "layout": "main"
+    },
+    {
+      "path": "/tenants/create",
+      "page": "tenants/edit",
+      "layout": "main"
+    },
+    {
+      "path": "/tournaments/stages/list",
+      "page": "tournaments/stages/list",
+      "layout": "main"
+    },
+    {
+      "path": "/tournaments/edit/:id",
+      "page": "tournaments/edit",
+      "layout": "main"
+    },
+    {
+      "path": "/tournaments/create",
+      "page": "tournaments/create",
+      "layout": "main"
     }
-  ]
+  ],
+  "partials": {
+    "Heading": {
+      "meta": [
+        {
+          "type": "text",
+          "name": "Heading"
+        }
+      ]
+    },
+    "page_heading": {
+      "meta": [
+        {
+          "type": "text",
+          "name": "heading"
+        }
+      ]
+    }
+  }
 }

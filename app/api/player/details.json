@@ -29,7 +29,15 @@
                   },
                   {
                     "table": "player",
+                    "column": "internal_name"
+                  },
+                  {
+                    "table": "player",
                     "column": "name"
+                  },
+                  {
+                    "table": "player",
+                    "column": "email"
                   },
                   {
                     "table": "player",
@@ -84,7 +92,7 @@
                   "conditional": null,
                   "valid": true
                 },
-                "query": "SELECT player_id, name, color, dan, score\nFROM player\nWHERE player_id = :P1 /* {{$_GET.player_id}} */"
+                "query": "SELECT player_id, internal_name, name, email, color, dan, score\nFROM player\nWHERE player_id = :P1 /* {{$_GET.player_id}} */"
               }
             },
             "output": true,
@@ -95,7 +103,15 @@
               },
               {
                 "type": "text",
+                "name": "internal_name"
+              },
+              {
+                "type": "text",
                 "name": "name"
+              },
+              {
+                "type": "text",
+                "name": "email"
               },
               {
                 "type": "number",

@@ -1,0 +1,10 @@
+{
+  "list.ejs": {
+    "layoutPage": "main",
+    "description": "List all tenants"
+  },
+  "edit.ejs": {
+    "layoutPage": "main",
+    "description": "Create new / edit existing tenant"
+  }
+}

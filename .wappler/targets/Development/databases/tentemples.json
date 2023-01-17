@@ -409,47 +409,6 @@
         },
         "parent": "tournament_challenges"
       },
-      "user": {
-        "db": {
-          "engine": "InnoDB",
-          "schema": "tentemples",
-          "collation": "utf8_general_ci",
-          "system_versioned": false
-        },
-        "columns": {
-          "user_id": {
-            "db": {
-              "type": "increments",
-              "primary": true,
-              "nullable": false
-            }
-          },
-          "username": {
-            "db": {
-              "type": "string",
-              "maxLength": 255,
-              "primary": false,
-              "nullable": true
-            }
-          },
-          "email": {
-            "db": {
-              "type": "string",
-              "maxLength": 255,
-              "primary": false,
-              "nullable": true
-            }
-          },
-          "password": {
-            "db": {
-              "type": "string",
-              "maxLength": 255,
-              "primary": false,
-              "nullable": true
-            }
-          }
-        }
-      },
       "player": {
         "db": {
           "engine": "InnoDB",
@@ -517,6 +476,47 @@
             "db": {
               "type": "integer",
               "default": "'0'",
+              "primary": false,
+              "nullable": true
+            }
+          }
+        }
+      },
+      "user": {
+        "db": {
+          "engine": "InnoDB",
+          "schema": "tentemples",
+          "collation": "utf8_general_ci",
+          "system_versioned": false
+        },
+        "columns": {
+          "user_id": {
+            "db": {
+              "type": "increments",
+              "primary": true,
+              "nullable": false
+            }
+          },
+          "username": {
+            "db": {
+              "type": "string",
+              "maxLength": 255,
+              "primary": false,
+              "nullable": true
+            }
+          },
+          "email": {
+            "db": {
+              "type": "string",
+              "maxLength": 255,
+              "primary": false,
+              "nullable": true
+            }
+          },
+          "password": {
+            "db": {
+              "type": "string",
+              "maxLength": 255,
               "primary": false,
               "nullable": true
             }

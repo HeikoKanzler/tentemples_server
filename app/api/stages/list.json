@@ -1,0 +1,68 @@
+{
+  "meta": {
+    "$_GET": [
+      {
+        "type": "text",
+        "name": "sort"
+      },
+      {
+        "type": "text",
+        "name": "dir"
+      }
+    ]
+  },
+  "exec": {
+    "steps": {
+      "name": "stages",
+      "module": "dbconnector",
+      "action": "select",
+      "options": {
+        "connection": "tentemples",
+        "sql": {
+          "type": "SELECT",
+          "columns": [
+            {
+              "table": "tournament_stages",
+              "column": "*"
+            }
+          ],
+          "params": [],
+          "table": {
+            "name": "tournament_stages"
+          },
+          "primary": "stage_id",
+          "joins": [],
+          "query": "SELECT *\nFROM tournament_stages"
+        }
+      },
+      "output": true,
+      "meta": [
+        {
+          "type": "number",
+          "name": "stage_id"
+        },
+        {
+          "type": "number",
+          "name": "tournament_id"
+        },
+        {
+          "type": "text",
+          "name": "title"
+        },
+        {
+          "type": "text",
+          "name": "description"
+        },
+        {
+          "type": "text",
+          "name": "background_image"
+        },
+        {
+          "type": "text",
+          "name": "difficulty"
+        }
+      ],
+      "outputType": "array"
+    }
+  }
+}

@@ -2,7 +2,7 @@
   "meta": {
     "$_POST": [
       {
-        "type": "text",
+        "type": "number",
         "name": "player_id"
       },
       {
@@ -12,6 +12,30 @@
       {
         "type": "text",
         "name": "dan"
+      },
+      {
+        "type": "text",
+        "name": "name"
+      },
+      {
+        "type": "text",
+        "name": "email"
+      },
+      {
+        "type": "text",
+        "name": "tenant"
+      },
+      {
+        "type": "text",
+        "name": "internal_name"
+      },
+      {
+        "type": "number",
+        "name": "tenant_id"
+      },
+      {
+        "type": "number",
+        "name": "color"
       }
     ]
   },
@@ -28,6 +52,30 @@
             "values": [
               {
                 "table": "player",
+                "column": "internal_name",
+                "type": "text",
+                "value": "{{$_POST.internal_name}}"
+              },
+              {
+                "table": "player",
+                "column": "tenant_id",
+                "type": "number",
+                "value": "{{$_POST.tenant_id}}"
+              },
+              {
+                "table": "player",
+                "column": "name",
+                "type": "text",
+                "value": "{{$_POST.name}}"
+              },
+              {
+                "table": "player",
+                "column": "email",
+                "type": "text",
+                "value": "{{$_POST.email}}"
+              },
+              {
+                "table": "player",
                 "column": "score",
                 "type": "number",
                 "value": "{{$_POST.score}}"
@@ -37,6 +85,12 @@
                 "column": "dan",
                 "type": "number",
                 "value": "{{$_POST.dan}}"
+              },
+              {
+                "table": "player",
+                "column": "color",
+                "type": "number",
+                "value": "{{$_POST.color}}"
               }
             ],
             "table": "player",
@@ -56,24 +110,54 @@
               ]
             },
             "returning": "player_id",
-            "query": "UPDATE player\nSET score = :P1 /* {{$_POST.score}} */, dan = :P2 /* {{$_POST.dan}} */\nWHERE player_id = :P3 /* {{$_POST.player_id}} */",
+            "query": "UPDATE player\nSET internal_name = :P1 /* {{$_POST.internal_name}} */, tenant_id = :P2 /* {{$_POST.tenant_id}} */, name = :P3 /* {{$_POST.name}} */, email = :P4 /* {{$_POST.email}} */, score = :P5 /* {{$_POST.score}} */, dan = :P6 /* {{$_POST.dan}} */, color = :P7 /* {{$_POST.color}} */\nWHERE player_id = :P8 /* {{$_POST.player_id}} */",
             "params": [
               {
                 "name": ":P1",
                 "type": "expression",
-                "value": "{{$_POST.score}}",
+                "value": "{{$_POST.internal_name}}",
                 "test": ""
               },
               {
                 "name": ":P2",
                 "type": "expression",
+                "value": "{{$_POST.tenant_id}}",
+                "test": ""
+              },
+              {
+                "name": ":P3",
+                "type": "expression",
+                "value": "{{$_POST.name}}",
+                "test": ""
+              },
+              {
+                "name": ":P4",
+                "type": "expression",
+                "value": "{{$_POST.email}}",
+                "test": ""
+              },
+              {
+                "name": ":P5",
+                "type": "expression",
+                "value": "{{$_POST.score}}",
+                "test": ""
+              },
+              {
+                "name": ":P6",
+                "type": "expression",
                 "value": "{{$_POST.dan}}",
+                "test": ""
+              },
+              {
+                "name": ":P7",
+                "type": "expression",
+                "value": "{{$_POST.color}}",
                 "test": ""
               },
               {
                 "operator": "equal",
                 "type": "expression",
-                "name": ":P3",
+                "name": ":P8",
                 "value": "{{$_POST.player_id}}",
                 "test": ""
               }

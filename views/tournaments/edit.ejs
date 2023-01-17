@@ -1,0 +1,49 @@
+<!-- Wappler include head-page="layouts/main" fontawesome_5="cdn" bootstrap5="local" is="dmx-app" id="edit" appConnect="local" -->
+<dmx-serverconnect id="get_tournament" url="/api/tournament/details" dmx-param:tournament_id="query.id"></dmx-serverconnect>
+<meta name="ac:route" content="/tournaments/edit/:id">
+<div class="container">
+  <%- await include('/partials/page_heading', Object.assign({}, locals, {heading:'Edit Tournament {{query.id}}'})) %>
+
+  <div class="row">
+    <div class="col">
+      <form is="dmx-serverconnect-form" id="create_tenant" method="post" action="/api/tournament/create" dmx-generator="bootstrap5" dmx-form-type="horizontal" dmx-populate="get_tournament.data.tournament">
+        <div class="form-group mb-3 row">
+          <label for="inp_tenant_id" class="col-sm-2 col-form-label">Tenant</label>
+          <div class="col-sm-10">
+            <input type="number" class="form-control" id="inp_tenant_id" name="tenant_id" dmx-bind:value="get_tournament.data.tournament.tenant_id" aria-describedby="inp_tenant_id_help" placeholder="Enter Tenant ID" dmxorgdomid="d79">
+          </div>
+        </div>
+        <div class="form-group mb-3 row">
+          <label for="inp_name" class="col-sm-2 col-form-label">Name</label>
+          <div class="col-sm-10">
+            <input type="text" class="form-control" id="inp_name" name="name" dmx-bind:value="get_tournament.data.tournament.name" aria-describedby="inp_name_help" placeholder="Enter Name" dmxorgdomid="d35">
+          </div>
+        </div>
+        <div class="form-group mb-3 row">
+          <label for="inp_title" class="col-sm-2 col-form-label">Title</label>
+          <div class="col-sm-10">
+            <input type="text" class="form-control" id="inp_title" name="title" dmx-bind:value="get_tournament.data.tournament.title" aria-describedby="inp_title_help" placeholder="Enter Title" dmxorgdomid="d46">
+          </div>
+        </div>
+        <div class="form-group mb-3 row">
+          <label for="inp_description" class="col-sm-2 col-form-label">Description</label>
+          <div class="col-sm-10">
+            <input type="text" class="form-control" id="inp_description" name="description" dmx-bind:value="get_tournament.data.tournament.description" aria-describedby="inp_description_help" placeholder="Enter Description" dmxorgdomid="d57">
+          </div>
+        </div>
+        <div class="form-group mb-3 row">
+          <label for="inp_scope" class="col-sm-2 col-form-label">Scope</label>
+          <div class="col-sm-10">
+            <input type="number" class="form-control" id="inp_scope" name="scope" dmx-bind:value="get_tournament.data.tournament.scope" aria-describedby="inp_scope_help" placeholder="Enter Scope" dmxorgdomid="d68">
+          </div>
+        </div>
+        <div class="form-group mb-3 row">
+          <div class="col-sm-2">&nbsp;</div>
+          <div class="col-sm-10">
+            <button type="submit" class="btn btn-primary" dmx-bind:value="get_tournament.data.tournament.Save" dmx-bind:disabled="state.executing" dmxorgdomid="d90">Save <span class="spinner-border spinner-border-sm" role="status" dmx-show="state.executing" dmxorgdomid="d92"></span></button>
+          </div>
+        </div>
+      </form>
+    </div>
+  </div>
+</div>

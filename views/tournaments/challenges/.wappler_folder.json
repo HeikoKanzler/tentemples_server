@@ -1,0 +1,6 @@
+{
+  "list.ejs": {
+    "layoutPage": "main",
+    "description": "List (or filter) all challenges"
+  }
+}

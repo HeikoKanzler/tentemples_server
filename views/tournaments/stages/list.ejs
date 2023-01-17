@@ -1,0 +1,32 @@
+<!-- Wappler include head-page="layouts/main" fontawesome_5="cdn" bootstrap5="local" is="dmx-app" id="list" appConnect="local" components="{dmxBootstrap5TableGenerator:{}}" -->
+<dmx-serverconnect id="get_all_stages" url="/api/stages/list"></dmx-serverconnect>
+<meta name="ac:route" content="/tournaments/stages/list">
+<div class="container">
+  <%- await include('/partials/page_heading', Object.assign({}, locals, {heading:'Stages'})) %>
+  <div class="row">
+    <div class="col">
+      <table class="table table-bordered table-striped table-hover">
+        <thead>
+          <tr>
+            <th>Stage</th>
+            <th>Tournament</th>
+            <th>Title</th>
+            <th>Description</th>
+            <th>Background image</th>
+            <th>Difficulty</th>
+          </tr>
+        </thead>
+        <tbody is="dmx-repeat" dmx-generator="bs5table" dmx-bind:repeat="get_all_stages.data.stages" id="tableRepeat1">
+          <tr>
+            <td dmx-text="stage_id"></td>
+            <td dmx-text="tournament_id"></td>
+            <td dmx-text="title"></td>
+            <td dmx-text="description"></td>
+            <td dmx-text="background_image"></td>
+            <td dmx-text="difficulty"></td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+</div>

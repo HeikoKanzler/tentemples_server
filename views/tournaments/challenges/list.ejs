@@ -1,0 +1,34 @@
+<!-- Wappler include head-page="layouts/main" bootstrap5="local" is="dmx-app" id="list" appConnect="local" components="{dmxBootstrap5TableGenerator:{},dmxFormatter:{}}" fontawesome_5pro="cdn" -->
+<dmx-serverconnect id="get_challenges" url="/api/tournament/challenge/list" dmx-param:tournament_id="query.tournament_id"></dmx-serverconnect>
+<div class="container">
+  <%- await include('/partials/page_heading', Object.assign({}, locals, {heading:'Challenges'})) %>
+  <div class="row">
+    <div class="col">
+      <table class="table table-striped table-bordered table-hover">
+        <thead>
+          <tr>
+            <th>Created</th>
+            <th>Finished</th>
+            <th>Stage</th>
+            <th>Player 1 name</th>
+            <th>Player 2 name</th>
+            <th>Winner name</th>
+            <th>Rounds</th>
+          </tr>
+        </thead>
+        <tbody is="dmx-repeat" dmx-generator="bs5table" dmx-bind:repeat="get_challenges.data.challenges" id="tableRepeat2">
+          <tr>
+            <td dmx-text="created"></td>
+            <td dmx-text="finished"></td>
+            <td dmx-text="stage_id"></td>
+            <td dmx-text="player_1_name"></td>
+            <td dmx-text="player_2_name"></td>
+            <td dmx-text="winner_name"></td>
+            <td dmx-text="rounds"></td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+</div>
+<meta name="ac:route" content="/tournaments/challenges/list/:tournament_id">

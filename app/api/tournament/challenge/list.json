@@ -1,0 +1,260 @@
+{
+  "meta": {
+    "$_GET": [
+      {
+        "type": "text",
+        "name": "sort"
+      },
+      {
+        "type": "text",
+        "name": "dir"
+      },
+      {
+        "type": "text",
+        "name": "tournament_id"
+      }
+    ]
+  },
+  "exec": {
+    "steps": {
+      "name": "challenges",
+      "module": "dbconnector",
+      "action": "select",
+      "options": {
+        "connection": "tentemples",
+        "sql": {
+          "type": "SELECT",
+          "columns": [
+            {
+              "table": "tournament_challenges",
+              "column": "created"
+            },
+            {
+              "table": "tournament_challenges",
+              "column": "finished"
+            },
+            {
+              "table": "tournament_challenges",
+              "column": "stage_id"
+            },
+            {
+              "table": "player_1",
+              "column": "name",
+              "alias": "player_1_name"
+            },
+            {
+              "table": "player_2",
+              "column": "name",
+              "alias": "player_2_name"
+            },
+            {
+              "table": "winner",
+              "column": "name",
+              "alias": "winner_name"
+            },
+            {
+              "table": "rounds",
+              "column": "challenge_id",
+              "alias": "rounds",
+              "aggregate": "COUNT"
+            }
+          ],
+          "params": [
+            {
+              "operator": "equal",
+              "type": "expression",
+              "name": ":P1",
+              "value": "{{$_GET.tournament_id}}",
+              "test": ""
+            }
+          ],
+          "table": {
+            "name": "tournament_challenges"
+          },
+          "primary": "challenge_id",
+          "joins": [
+            {
+              "table": "player",
+              "column": "*",
+              "alias": "player_1",
+              "type": "LEFT",
+              "clauses": {
+                "condition": "AND",
+                "rules": [
+                  {
+                    "table": "player_1",
+                    "column": "player_id",
+                    "operator": "equal",
+                    "value": {
+                      "table": "tournament_challenges",
+                      "column": "player_1"
+                    },
+                    "operation": "="
+                  }
+                ]
+              },
+              "primary": "player_id"
+            },
+            {
+              "table": "player",
+              "column": "*",
+              "alias": "player_2",
+              "type": "LEFT",
+              "clauses": {
+                "condition": "AND",
+                "rules": [
+                  {
+                    "table": "player_2",
+                    "column": "player_id",
+                    "operator": "equal",
+                    "value": {
+                      "table": "tournament_challenges",
+                      "column": "winner"
+                    },
+                    "operation": "="
+                  }
+                ]
+              },
+              "primary": "player_id"
+            },
+            {
+              "table": "player",
+              "column": "*",
+              "alias": "winner",
+              "type": "LEFT",
+              "clauses": {
+                "condition": "AND",
+                "rules": [
+                  {
+                    "table": "winner",
+                    "column": "player_id",
+                    "operator": "equal",
+                    "value": {
+                      "table": "tournament_challenges",
+                      "column": "winner"
+                    },
+                    "operation": "="
+                  }
+                ]
+              },
+              "primary": "player_id"
+            },
+            {
+              "table": "tournament_challenge_rounds",
+              "column": "*",
+              "alias": "rounds",
+              "type": "LEFT",
+              "clauses": {
+                "condition": "AND",
+                "rules": [
+                  {
+                    "table": "rounds",
+                    "column": "challenge_id",
+                    "operator": "equal",
+                    "value": {
+                      "table": "tournament_challenges",
+                      "column": "challenge_id"
+                    },
+                    "operation": "="
+                  }
+                ]
+              },
+              "primary": "round_id"
+            }
+          ],
+          "wheres": {
+            "condition": "AND",
+            "rules": [
+              {
+                "id": "tournament_challenges.tournament_id",
+                "field": "tournament_challenges.tournament_id",
+                "type": "double",
+                "operator": "equal",
+                "value": "{{$_GET.tournament_id}}",
+                "data": {
+                  "table": "tournament_challenges",
+                  "column": "tournament_id",
+                  "type": "number",
+                  "columnObj": {
+                    "type": "reference",
+                    "primary": false,
+                    "nullable": true,
+                    "references": "tournament_id",
+                    "inTable": "tournaments",
+                    "referenceType": "integer",
+                    "onUpdate": "CASCADE",
+                    "onDelete": "CASCADE",
+                    "name": "tournament_id"
+                  }
+                },
+                "operation": "=",
+                "table": "tournament_challenges"
+              }
+            ],
+            "conditional": null,
+            "valid": true
+          },
+          "query": "SELECT tournament_challenges.created, tournament_challenges.finished, tournament_challenges.stage_id, player_1.name AS player_1_name, player_2.name AS player_2_name, winner.name AS winner_name, COUNT(rounds.challenge_id) AS rounds\nFROM tournament_challenges\nLEFT JOIN player AS player_1 ON player_1.player_id = tournament_challenges.player_1 LEFT JOIN player AS player_2 ON player_2.player_id = tournament_challenges.winner LEFT JOIN player AS winner ON winner.player_id = tournament_challenges.winner LEFT JOIN tournament_challenge_rounds AS rounds ON rounds.challenge_id = tournament_challenges.challenge_id\nWHERE tournament_challenges.tournament_id = :P1 /* {{$_GET.tournament_id}} */\nGROUP BY tournament_challenges.created, tournament_challenges.finished, tournament_challenges.stage_id, player_1.name, player_2.name, winner.name",
+          "groupBy": [
+            {
+              "table": "tournament_challenges",
+              "column": "created"
+            },
+            {
+              "table": "tournament_challenges",
+              "column": "finished"
+            },
+            {
+              "table": "tournament_challenges",
+              "column": "stage_id"
+            },
+            {
+              "table": "player_1",
+              "column": "name"
+            },
+            {
+              "table": "player_2",
+              "column": "name"
+            },
+            {
+              "table": "winner",
+              "column": "name"
+            }
+          ]
+        }
+      },
+      "output": true,
+      "meta": [
+        {
+          "type": "datetime",
+          "name": "created"
+        },
+        {
+          "type": "datetime",
+          "name": "finished"
+        },
+        {
+          "type": "number",
+          "name": "stage_id"
+        },
+        {
+          "type": "text",
+          "name": "player_1_name"
+        },
+        {
+          "type": "text",
+          "name": "player_2_name"
+        },
+        {
+          "type": "text",
+          "name": "winner_name"
+        },
+        {
+          "type": "number",
+          "name": "rounds"
+        }
+      ],
+      "outputType": "array"
+    }
+  }
+}
