@@ -31,6 +31,20 @@
       "remoteURL": "http://localhost:3000",
       "access": "local",
       "targetType": "wappler"
+    },
+    {
+      "name": "Railway",
+      "remoteURL": "https://tentemples.up.railway.app",
+      "access": "local",
+      "targetType": "wappler",
+      "usage": "production",
+      "databaseConnectionType": "custom",
+      "db_host": "$MYSQLHOST",
+      "db_port": "$MYSQLPORT",
+      "db_user": "$MYSQLUSER",
+      "db_password": "$MYSQLPASSWORD",
+      "db_database": "$MYSQLDATABASE",
+      "localFolder": "file:///Users/heikokanzler/Documents/Softwareprojekte/Ten%20Temples/ServerProd"
     }
   ],
   "activeTarget": "Development",
