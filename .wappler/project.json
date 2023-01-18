@@ -39,11 +39,11 @@
       "targetType": "wappler",
       "usage": "production",
       "databaseConnectionType": "custom",
-      "db_host": "$MYSQLHOST",
-      "db_port": "$MYSQLPORT",
-      "db_user": "$MYSQLUSER",
-      "db_password": "$MYSQLPASSWORD",
-      "db_database": "$MYSQLDATABASE",
+      "db_host": "containers-us-west-106.railway.app",
+      "db_port": "6249",
+      "db_user": "root",
+      "db_password": "OaDCYVfmVu4X4y9kbd1E",
+      "db_database": "railway",
       "localFolder": "file:///Users/heikokanzler/Documents/Softwareprojekte/Ten%20Temples/ServerProd"
     }
   ],
