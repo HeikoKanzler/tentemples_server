@@ -27,27 +27,27 @@
   "projectLinksType": "site",
   "targets": [
     {
-      "name": "Development",
+      "name": "tt_dev",
       "remoteURL": "http://localhost:3000",
       "access": "local",
       "targetType": "wappler"
     },
     {
-      "name": "Railway",
+      "name": "tt_local",
+      "remoteURL": "http://localhost:3000",
+      "access": "local",
+      "targetType": "wappler",
+      "localFolder": "file:///Users/heikokanzler/Documents/Softwareprojekte/Ten%20Temples/builds/local"
+    },
+    {
+      "name": "tt_production",
       "remoteURL": "https://tentemples.up.railway.app",
       "access": "local",
       "targetType": "wappler",
-      "usage": "production",
-      "databaseConnectionType": "custom",
-      "db_host": "containers-us-west-106.railway.app",
-      "db_port": "6249",
-      "db_user": "root",
-      "db_password": "OaDCYVfmVu4X4y9kbd1E",
-      "db_database": "railway",
-      "localFolder": "file:///Users/heikokanzler/Documents/Softwareprojekte/Ten%20Temples/ServerProd"
+      "localFolder": "file:///Users/heikokanzler/Documents/Softwareprojekte/Ten%20Temples/builds/railway"
     }
   ],
-  "activeTarget": "Development",
+  "activeTarget": "tt_dev",
   "projectType": "web",
   "folder": "e04d02ba-b487-4e6d-b9dc-e529485dae30"
 }
