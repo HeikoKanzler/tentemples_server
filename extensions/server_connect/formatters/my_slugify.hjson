@@ -1,0 +1,39 @@
+{
+  type: 'method_slugifyLocale',
+  groupTitle : 'My Formatters',
+  groupIcon : 'fa fa-lg fa-toolbox',
+  addTitle: 'Slugify with locale',
+  title : 'Slugify with locale',
+  icon : 'fa fa-lg fa-font-case',
+  state : 'opened',
+  help : 'Slugify with locale and config',
+  properties : [
+    {
+      group: 'Slugify Properties',
+      variables: [
+        {
+          name: '1', 
+          optionName: '1', 
+          title: 'Locale', 
+          type: 'text',
+          serverDataBindings: true, 
+          defaultValue: 'en',
+        },
+        {
+          name: '2', 
+          optionName: '2', 
+          title: 'Replacement', 
+          type: 'text',
+          defaultValue: "_",
+        },
+        {
+          name: '3', 
+          optionName: '3', 
+          title: 'Lower Case', 
+          type: 'boolean',
+          defaultValue: true,
+        },
+      ]
+    }
+  ]
+}

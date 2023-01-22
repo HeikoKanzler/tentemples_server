@@ -1,6 +1,10 @@
 <!-- Wappler include head-page="layouts/main" fontawesome_5="cdn" bootstrap5="local" is="dmx-app" id="list" appConnect="local" components="{dmxBootstrap5TableGenerator:{},dmxBrowser:{},dmxFormatter:{}}" -->
-<div is="dmx-browser" id="browser1"></div>
-<dmx-serverconnect id="get_tournaments" url="/api/tournament/list"></dmx-serverconnect>
+<section>
+  <dmx-serverconnect id="get_tournaments" url="/api/tournament/list"></dmx-serverconnect>
+  <div is="dmx-browser" id="browser1"></div>
+</section>
+
+
 <div class="container">
   <%- await include('/partials/page_heading', Object.assign({}, locals, {heading:'Tournaments'})) %>
   <div class="row">

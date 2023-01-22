@@ -30,11 +30,11 @@
     "output": false
   },
   {
-    "name": "testing_value",
+    "name": "testing_value_slugified",
     "module": "core",
     "action": "setvalue",
     "options": {
-      "value": "Hello World"
+      "value": "{{post_data.data1.slugifyLocale(en, '-', true)}}"
     },
     "meta": [],
     "outputType": "text",

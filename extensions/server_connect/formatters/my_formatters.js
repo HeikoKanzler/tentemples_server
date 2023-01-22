@@ -1,5 +1,5 @@
 // JavaScript Document
 
-exports.print = function (logstatement) {
+exports.boeh = function (logstatement) {
   console.log(logstatement);
 }

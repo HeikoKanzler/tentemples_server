@@ -1,9 +1,13 @@
 <!-- Wappler include head-page="layouts/main" fontawesome_5="cdn" bootstrap5="local" is="dmx-app" id="list" appConnect="local" components="{dmxBootstrap5TableGenerator:{},dmxBootstrap5Modal:{}}" -->
+<section id="DBConnections">
+  <dmx-serverconnect id="get_player_details" noload url="/api/player/details" dmx-param:player_id=""></dmx-serverconnect>
+  <dmx-serverconnect id="get_players" url="/api/player/list"></dmx-serverconnect>
+</section>
 
 <meta name="ac:route" content="/player/list">
-<dmx-serverconnect id="get_players" url="/api/player/list"></dmx-serverconnect>
-<dmx-serverconnect id="get_player_details" noload url="/api/player/details" dmx-param:player_id=""></dmx-serverconnect>
-<div class="modal" id="modal_player_details" is="dmx-bs5-modal" tabindex="-1" dmx-on:hide-bs-modal="form_player_update.reset();modal_player_details.hide()">
+
+
+<div class="modal" id="modal_player_details" is="dmx-bs5-modal" tabindex="-1" dmx-on:hide-bs-modal="form_player_update.reset(true);modal_player_details.hide()">
   <div class="modal-dialog" role="document">
     <div class="modal-content">
       <div class="modal-header">
@@ -94,7 +98,7 @@
             <td dmx-text="dan"></td>
             <td dmx-text="color"></td>
             <td>
-              <button id="btn_edit_player" class="btn btn-warning btn-sm text-white" dmx-on:click="modal_player_details.show();get_player_details.load({player_id: player_id})"><i class="fas fa-pencil-alt"></i></button>
+              <button id="btn_edit_player" class="btn btn-warning btn-sm text-white" dmx-on:click="get_player_details.load({player_id: player_id});modal_player_details.show()"><i class="fas fa-pencil-alt"></i></button>
             </td>
           </tr>
         </tbody>
